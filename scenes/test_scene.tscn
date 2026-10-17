@@ -4,11 +4,8 @@
 [ext_resource type="Script" uid="uid://cig4a81omwktx" path="res://scripts/level_logic.gd" id="1_j8ivh"]
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
 [ext_resource type="PackedScene" uid="uid://b6kkhql3o1ac1" path="res://scenes/Button.tscn" id="3_nd71p"]
 =======
-=======
->>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 [ext_resource type="PackedScene" uid="uid://cbuio37kt5fjb" path="res://scenes/BuyButton.tscn" id="3_7ddre"]

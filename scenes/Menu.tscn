@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://cwokmogupy76"]
 
-[ext_resource type="Script" path="res://scripts/menu.gd" id="1_jmdev"]
+[ext_resource type="Script" uid="uid://8pwt0828liuo" path="res://scripts/menu.gd" id="1_jmdev"]
 [ext_resource type="FontFile" uid="uid://cokcitl7rd7kp" path="res://art/DarumadropOne-Regular.ttf" id="1_upctu"]
 [ext_resource type="Shader" uid="uid://beuvpclwtqb7s" path="res://shaders/AnimatedPatternBackground.gdshader" id="2_11y2r"]
 [ext_resource type="Texture2D" uid="uid://cp415upxgcnm0" path="res://art/cat_paw.png" id="2_o0tnf"]
-[ext_resource type="Texture2D" uid="uid://dmcgq4hlsvcd" path="res://art/Cat Paw.png" id="5_jmdev"]
+[ext_resource type="Texture2D" uid="uid://d220aerli21id" path="res://art/Cat Paw.png" id="5_jmdev"]
 [ext_resource type="Texture2D" uid="uid://cd0qxetsmbyuh" path="res://art/Sell Button.png" id="6_aaywf"]
 [ext_resource type="Texture2D" uid="uid://c61vyc5episx3" path="res://art/Button Base.png" id="7_1abgu"]
 
