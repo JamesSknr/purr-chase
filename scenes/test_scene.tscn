@@ -1,3 +1,24 @@
 [gd_scene format=3 uid="uid://s3rwrt58wisn"]
 
+[ext_resource type="PackedScene" uid="uid://0ychlkpant3a" path="res://scenes/cat_paw.tscn" id="1_g7g4h"]
+[ext_resource type="Script" uid="uid://cig4a81omwktx" path="res://scripts/level_logic.gd" id="1_j8ivh"]
+[ext_resource type="PackedScene" uid="uid://cgk1xle11oqm3" path="res://scenes/Button.tscn" id="3_nd71p"]
+
 [node name="testScene" type="Node2D" unique_id=2012543513]
+script = ExtResource("1_j8ivh")
+
+[node name="BuyButton" parent="." unique_id=295758268 instance=ExtResource("3_nd71p")]
+position = Vector2(93, 396)
+button_name = "Buy"
+button_color = Color(0, 1, 0, 1)
+
+[node name="SellButton" parent="." unique_id=1605237462 instance=ExtResource("3_nd71p")]
+position = Vector2(936, 404)
+button_name = "Sell"
+button_color = Color(1, 0, 0, 1)
+
+[node name="CatPaw" parent="." unique_id=1855701812 instance=ExtResource("1_g7g4h")]
+offset_left = 483.0
+offset_top = 476.0
+offset_right = 679.0
+offset_bottom = 803.0
