@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://0ychlkpant3a" path="res://scenes/cat_paw.tscn" id="1_g7g4h"]
 [ext_resource type="Script" uid="uid://cig4a81omwktx" path="res://scripts/level_logic.gd" id="1_j8ivh"]
-[ext_resource type="PackedScene" uid="uid://cgk1xle11oqm3" path="res://scenes/Button.tscn" id="3_nd71p"]
 
 [node name="testScene" type="Node2D" unique_id=2012543513]
 script = ExtResource("1_j8ivh")
@@ -13,16 +12,6 @@ offset_top = -11.0
 offset_right = 1178.0
 offset_bottom = 686.0
 color = Color(0.990763, 0.61327225, 0.36772475, 1)
-
-[node name="BuyButton" parent="." unique_id=295758268 instance=ExtResource("3_nd71p")]
-position = Vector2(103, 488)
-button_name = "Buy"
-button_color = Color(0, 1, 0, 1)
-
-[node name="SellButton" parent="." unique_id=1605237462 instance=ExtResource("3_nd71p")]
-position = Vector2(553, 491)
-button_name = "Sell"
-button_color = Color(1, 0, 0, 1)
 
 [node name="TabletTemp" type="ColorRect" parent="." unique_id=1735224390]
 offset_left = 26.0
