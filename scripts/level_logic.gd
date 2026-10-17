@@ -3,8 +3,9 @@ enum action {BUY, SELL, HOLD}
 var current_action = action.HOLD
 
 @onready var cat_paw: Cat = $CatPaw
-@onready var buy_button: BigButton = $BuyButton
-@onready var sell_button: BigButton = $SellButton
+@onready var buy_button: Node2D = $BuyButton
+@onready var sell_button: Node2D = $SellButton
+
 
 
 # Called when the node enters the scene tree for the first time.
@@ -34,8 +35,10 @@ func _unhandled_input(event):
 func buy_share() -> void:
 	print("YOU BOUGHT A SHARE")
 	current_action = action.HOLD
+	buy_button.press_button_tween()
 	
 	
 func sell_share() -> void:
 	print("YOU SOLD A SHARE")
 	current_action = action.HOLD
+	sell_button.press_button_tween()
