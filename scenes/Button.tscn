@@ -1,11 +1,7 @@
 [gd_scene format=3 uid="uid://b6kkhql3o1ac1"]
 
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
 [ext_resource type="Script" path="res://scenes/button.gd" id="1_1xt0e"]
-=======
-[ext_resource type="Script" uid="uid://c81ddphrf3wbc" path="res://scripts/button.gd" id="1_1xt0e"]
->>>>>>> Stashed changes
 =======
 [ext_resource type="Script" uid="uid://c81ddphrf3wbc" path="res://scripts/button.gd" id="1_1xt0e"]
 >>>>>>> Stashed changes
