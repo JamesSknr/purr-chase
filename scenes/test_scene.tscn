@@ -8,17 +8,17 @@
 script = ExtResource("1_j8ivh")
 
 [node name="BuyButton" parent="." unique_id=295758268 instance=ExtResource("3_nd71p")]
-position = Vector2(93, 396)
+position = Vector2(54, 490)
 button_name = "Buy"
 button_color = Color(0, 1, 0, 1)
 
 [node name="SellButton" parent="." unique_id=1605237462 instance=ExtResource("3_nd71p")]
-position = Vector2(936, 404)
+position = Vector2(522, 489)
 button_name = "Sell"
 button_color = Color(1, 0, 0, 1)
 
 [node name="CatPaw" parent="." unique_id=1855701812 instance=ExtResource("1_g7g4h")]
-offset_left = 483.0
-offset_top = 476.0
-offset_right = 679.0
-offset_bottom = 803.0
+offset_left = 274.0
+offset_top = 503.0
+offset_right = 470.0
+offset_bottom = 830.0
