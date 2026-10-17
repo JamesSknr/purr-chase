@@ -112,40 +112,26 @@ func _unhandled_input(event):
 		if event.pressed and event.keycode == KEY_A:
 			current_action = action.BUY
 			cat_paw.press_button_tween(buy_button.position)
-
+		
 			buy_share()
-
+			
 		# If 'D' key is pressed sell a share
 		if event.pressed and event.keycode == KEY_D:
 			current_action = action.SELL
 			cat_paw.press_button_tween(sell_button.position)
 			sell_share()
-
+			
 		else:
 			current_action = action.HOLD
 
 
 func buy_share() -> void:
-	var price := current_price()
-	if cash >= price:
-		cash -= price
-		shares += 1
-		print("YOU BOUGHT A SHARE at $%.2f | cash $%.2f | shares %d | net worth $%.2f"
-				% [price, cash, shares, net_worth()])
-	else:
-		print("NOT ENOUGH CASH (need $%.2f, have $%.2f)" % [price, cash])
+	print("YOU BOUGHT A SHARE")
 	current_action = action.HOLD
-	_update_hud()
-
-
+	buy_button.press_button_tween()
+	
+	
 func sell_share() -> void:
-	var price := current_price()
-	if shares > 0:
-		shares -= 1
-		cash += price
-		print("YOU SOLD A SHARE at $%.2f | cash $%.2f | shares %d | net worth $%.2f"
-				% [price, cash, shares, net_worth()])
-	else:
-		print("NO SHARES TO SELL")
+	print("YOU SOLD A SHARE")
 	current_action = action.HOLD
-	_update_hud()
+	sell_button.press_button_tween()
