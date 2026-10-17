@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://0ychlkpant3a" path="res://scenes/cat_paw.tscn" id="1_g7g4h"]
 [ext_resource type="Script" uid="uid://cig4a81omwktx" path="res://scripts/level_logic.gd" id="1_j8ivh"]
-[ext_resource type="PackedScene" uid="uid://b6kkhql3o1ac1" path="res://scenes/Button.tscn" id="3_nd71p"]
+[ext_resource type="PackedScene" uid="uid://cgk1xle11oqm3" path="res://scenes/Button.tscn" id="3_nd71p"]
 
 [node name="testScene" type="Node2D" unique_id=2012543513]
 script = ExtResource("1_j8ivh")
