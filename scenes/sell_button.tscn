@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://bdh6bjo0ow4il"]
+[gd_scene format=3 uid="uid://bwfuk4yj0u48s"]
 
 [ext_resource type="Texture2D" uid="uid://cd0qxetsmbyuh" path="res://art/Sell Button.png" id="1_2wawk"]
 [ext_resource type="Script" uid="uid://c5oyc2pm0jqli" path="res://scenes/sell_button.gd" id="1_iehiq"]
