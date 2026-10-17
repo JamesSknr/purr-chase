@@ -2,6 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://0ychlkpant3a" path="res://scenes/cat_paw.tscn" id="1_g7g4h"]
 [ext_resource type="Script" uid="uid://cig4a81omwktx" path="res://scripts/level_logic.gd" id="1_j8ivh"]
+[ext_resource type="PackedScene" uid="uid://c08k3vd16rcer" path="res://scenes/buy_button.tscn" id="3_nd71p"]
+[ext_resource type="PackedScene" uid="uid://bdh6bjo0ow4il" path="res://scenes/sell_button.tscn" id="4_7ddre"]
 
 [node name="testScene" type="Node2D" unique_id=2012543513]
 script = ExtResource("1_j8ivh")
@@ -43,6 +45,12 @@ offset_right = 222.0
 offset_bottom = 144.0
 theme_override_font_sizes/font_size = 55
 text = "CLOCK"
+
+[node name="BuyButton" parent="." unique_id=1816091244 instance=ExtResource("3_nd71p")]
+position = Vector2(131, 535)
+
+[node name="SellButton" parent="." unique_id=948599088 instance=ExtResource("4_7ddre")]
+position = Vector2(732, 535)
 
 [node name="CatPaw" parent="." unique_id=1855701812 instance=ExtResource("1_g7g4h")]
 anchors_preset = 11

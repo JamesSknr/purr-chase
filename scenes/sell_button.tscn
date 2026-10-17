@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bdh6bjo0ow4il"]
+
+[ext_resource type="Texture2D" uid="uid://cd0qxetsmbyuh" path="res://art/Sell Button.png" id="1_2wawk"]
+[ext_resource type="Texture2D" uid="uid://c61vyc5episx3" path="res://art/Button Base.png" id="2_iehiq"]
+
+[node name="SellButton" type="Node2D" unique_id=1816091244]
+
+[node name="SellButton" type="Sprite2D" parent="." unique_id=899667267]
+scale = Vector2(0.12290625, 0.12290625)
+texture = ExtResource("1_2wawk")
+
+[node name="ButtonBase" type="Sprite2D" parent="." unique_id=1093714706]
+scale = Vector2(0.12290625, 0.12290625)
+texture = ExtResource("2_iehiq")
