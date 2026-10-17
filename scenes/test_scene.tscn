@@ -3,16 +3,16 @@
 [ext_resource type="PackedScene" uid="uid://4yt8pa0vwxtw" path="res://scenes/cat_paw.tscn" id="1_g7g4h"]
 [ext_resource type="Script" uid="uid://cig4a81omwktx" path="res://scripts/level_logic.gd" id="1_j8ivh"]
 [ext_resource type="Shader" uid="uid://beuvpclwtqb7s" path="res://shaders/AnimatedPatternBackground.gdshader" id="2_3qnke"]
-[ext_resource type="PackedScene" path="res://scenes/buy_button.tscn" id="3_nd71p"]
+[ext_resource type="Texture2D" uid="uid://ckcdlvgej7asn" path="res://art/Living Room Background.png" id="2_rnaij"]
+[ext_resource type="PackedScene" uid="uid://c08k3vd16rcer" path="res://scenes/buy_button.tscn" id="3_nd71p"]
 [ext_resource type="Texture2D" uid="uid://cp415upxgcnm0" path="res://art/cat_paw.png" id="3_wtsjf"]
-[ext_resource type="PackedScene" path="res://scenes/sell_button.tscn" id="4_7ddre"]
-[ext_resource type="Script" uid="uid://wyp7h10gg56s" path="res://scripts/price_graph.gd" id="4_wtsjf"]
-[ext_resource type="AudioStream" uid="uid://v62hjpmaem51" path="res://SFX/Button Click.mp3" id="8_rnaij"]
+[ext_resource type="PackedScene" uid="uid://bdh6bjo0ow4il" path="res://scenes/sell_button.tscn" id="4_7ddre"]
+[ext_resource type="Script" path="res://scripts/price_graph.gd" id="4_wtsjf"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rnaij"]
 shader = ExtResource("2_3qnke")
 shader_parameter/pattern = ExtResource("3_wtsjf")
-shader_parameter/pattern_color = Color(1, 0.39285982, 0.37438384, 1)
+shader_parameter/pattern_color = Color(0.029506553, 0.029506562, 0.029506536, 1)
 shader_parameter/tiling = 100.0
 shader_parameter/speed = Vector2(0.1, 0.5)
 shader_parameter/rotation = 0.70981485014235
@@ -20,33 +20,33 @@ shader_parameter/rotation = 0.70981485014235
 [node name="testScene" type="Node2D" unique_id=2012543513]
 script = ExtResource("1_j8ivh")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=112982288]
-material = SubResource("ShaderMaterial_rnaij")
-offset_right = 1183.0
-offset_bottom = 675.0
-color = Color(0.99999994, 0.6751425, 0.39867917, 1)
+[node name="LivingRoomBackground" type="Sprite2D" parent="." unique_id=2069714296]
+position = Vector2(597, 354)
+scale = Vector2(0.28780204, 0.287802)
+texture = ExtResource("2_rnaij")
 
 [node name="TabletTemp" type="ColorRect" parent="." unique_id=1735224390]
 offset_left = 26.0
 offset_top = 14.0
-offset_right = 835.0
+offset_right = 770.0
 offset_bottom = 456.0
 color = Color(0.27509058, 0.27509058, 0.27509055, 1)
 
-[node name="TabletTemp2" type="ColorRect" parent="TabletTemp" unique_id=1637545397]
-layout_mode = 0
-offset_left = 14.0
-offset_top = 12.0
-offset_right = 784.0
-offset_bottom = 422.0
-color = Color(0.14767197, 0.14767176, 0.14767179, 1)
+[node name="GraphBackground" type="ColorRect" parent="." unique_id=112982288]
+material = SubResource("ShaderMaterial_rnaij")
+offset_left = 40.0
+offset_top = 26.0
+offset_right = 755.05774
+offset_bottom = 434.0
+color = Color(2.6095218e-05, 2.6095217e-05, 2.6095213e-05, 1)
 
-[node name="PriceGraph" type="Control" parent="TabletTemp/TabletTemp2" unique_id=1621626241]
+[node name="PriceGraph" type="Control" parent="." unique_id=1621626241]
+layout_mode = 3
 anchors_preset = 0
-offset_left = 184.0
-offset_top = 39.0
-offset_right = 580.0
-offset_bottom = 282.0
+offset_left = 224.0
+offset_top = 65.0
+offset_right = 620.0
+offset_bottom = 308.0
 script = ExtResource("4_wtsjf")
 
 [node name="ClockTemp" type="ColorRect" parent="." unique_id=1459985845]
