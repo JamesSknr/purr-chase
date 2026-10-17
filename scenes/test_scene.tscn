@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://s3rwrt58wisn"]
 
 [ext_resource type="PackedScene" uid="uid://0ychlkpant3a" path="res://scenes/cat_paw.tscn" id="1_g7g4h"]
-[ext_resource type="Script" uid="uid://cig4a81omwktx" path="res://scripts/level_logic.gd" id="1_j8ivh"]
+[ext_resource type="Script" path="res://scripts/level_logic.gd" id="1_j8ivh"]
 [ext_resource type="PackedScene" uid="uid://cgk1xle11oqm3" path="res://scenes/Button.tscn" id="3_nd71p"]
+[ext_resource type="PackedScene" uid="uid://hegg5rjxyqq5" path="res://scenes/clock.tscn" id="4_7ddre"]
 
 [node name="testScene" type="Node2D" unique_id=2012543513]
 script = ExtResource("1_j8ivh")
@@ -22,3 +23,6 @@ offset_left = 274.0
 offset_top = 503.0
 offset_right = 470.0
 offset_bottom = 830.0
+
+[node name="clock" parent="." unique_id=1996270700 instance=ExtResource("4_7ddre")]
+position = Vector2(900, 333)

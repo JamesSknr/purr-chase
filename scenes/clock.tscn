@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://hegg5rjxyqq5"]
+
+[ext_resource type="Script" uid="uid://cvbpojxfgv48c" path="res://scenes/clock.gd" id="1_7dv1d"]
+[ext_resource type="Texture2D" uid="uid://ccyc7boi06hrx" path="res://art/clockface.png" id="1_eptq3"]
+[ext_resource type="Texture2D" uid="uid://cb6kcqjdo4ti1" path="res://art/hourHand.png" id="2_7dv1d"]
+[ext_resource type="Texture2D" uid="uid://d2cp45a6u1ytf" path="res://art/minuteHand.png" id="3_er1xc"]
+
+[node name="clock" type="Node2D" unique_id=1996270700]
+script = ExtResource("1_7dv1d")
+metadata/_edit_vertical_guides_ = [701.0]
+metadata/_edit_horizontal_guides_ = [448.0]
+
+[node name="face" type="Sprite2D" parent="." unique_id=1527462113]
+texture = ExtResource("1_eptq3")
+
+[node name="HourPivot" type="Node2D" parent="." unique_id=66396198]
+position = Vector2(-4, 1)
+rotation = 4.712389
+
+[node name="hourHand" type="Sprite2D" parent="HourPivot" unique_id=1629579552]
+position = Vector2(5, -1)
+texture = ExtResource("2_7dv1d")
+
+[node name="MinutePivot" type="Node2D" parent="." unique_id=1854633263]
+position = Vector2(-4, 1)
+
+[node name="minuteHand" type="Sprite2D" parent="MinutePivot" unique_id=178012617]
+position = Vector2(5, -1)
+texture = ExtResource("3_er1xc")
