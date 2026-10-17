@@ -1,19 +1,22 @@
 [gd_scene format=3 uid="uid://0ychlkpant3a"]
 
 [ext_resource type="Script" uid="uid://brokrr0sbu05j" path="res://scripts/cat_paw_controller.gd" id="1_8td5k"]
-[ext_resource type="Texture2D" uid="uid://bh1ba6y1ltl6o" path="res://art/cat_hand_placeholder.webp" id="1_sb1gb"]
+[ext_resource type="Texture2D" uid="uid://d220aerli21id" path="res://art/Cat Paw.png" id="2_8td5k"]
 
 [node name="CatPaw" type="Control" unique_id=1855701812]
 layout_mode = 3
-anchor_right = 0.16100001
-anchor_bottom = 0.483
-offset_right = 7.5279846
-offset_bottom = 11.015991
+offset_right = 193.0
+offset_bottom = 324.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_8td5k")
 
 [node name="CatHandPlaceholder" type="Sprite2D" parent="." unique_id=1622701025]
-position = Vector2(91.00001, 149.99998)
-scale = Vector2(0.30710658, 0.3071066)
-texture = ExtResource("1_sb1gb")
+position = Vector2(-6, 868)
+scale = Vector2(0.22428891, 0.22428893)
+texture = ExtResource("2_8td5k")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2054025404]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
