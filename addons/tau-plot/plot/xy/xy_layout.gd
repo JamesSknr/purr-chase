@@ -1,0 +1,1052 @@
+# Dependencies
+const AxisDomain := preload("res://addons/tau-plot/plot/xy/xy_domain.gd").AxisDomain
+const XYDomain := preload("res://addons/tau-plot/plot/xy/xy_domain.gd").XYDomain
+const TickSequence := preload("res://addons/tau-plot/plot/xy/tick_sequence.gd").TickSequence
+const TickResolver := preload("res://addons/tau-plot/plot/xy/tick_resolver.gd").TickResolver
+const SecondaryXTransform := preload("res://addons/tau-plot/plot/xy/secondary_x_transform.gd").SecondaryXTransform
+const AxisId := preload("res://addons/tau-plot/plot/xy/xy_axes.gd").AxisId
+const Axis := preload("res://addons/tau-plot/plot/xy/xy_axes.gd").Axis
+
+
+## Resolves XY plot screen-space layout from a domain and a style.
+## Computes per-pane plot rectangles, value-to-pixel mappings, and ticks.
+## Orientation-independent: works for x axis on any of the four edges.
+class XYLayout extends RefCounted:
+	## The computed domain that supplies axis ranges, categories, and series
+	## assignment. Set at construction. Input.
+	var domain: XYDomain = null
+
+	## Visual style (font, tick sizes, padding, colors).
+	## Must be set by the caller before calling [method update].
+	var style: TauXYStyle = null
+
+	## Transform from a data value to a pixel along one axis of one pane.
+	##
+	## Optimization. Folds the pane rectangle, the domain bounds, the inversion
+	## and the scale into a single multiply-add, resolved once by
+	## [method update]. Deriving them inside the mapping functions would repeat
+	## all four for every mapped value.
+	class AxisMapping extends RefCounted:
+		# The domain offset, the inversion and the axis length in pixels all
+		# collapse into this pair. On a logarithmic axis it applies to the
+		# logarithm of the value: the ratio cancels the base, so the raw log()
+		# is used.
+		var _scale_px: float = 0.0
+		var _offset_px: float = 0.0
+		var _is_log: bool = false
+
+		# A collapsed domain or a zero-extent pane has no transform. Held as a
+		# flag so the normal path stays a multiply-add.
+		var _degenerate: bool = false
+
+		# Pixel returned when a value has no mapping: every value when the
+		# transform is degenerate, a non-positive value on a logarithmic axis.
+		var _fallback_px: float = 0.0
+
+		## Resolves the transform.
+		## [param p_min] Domain minimum.
+		## [param p_max] Domain maximum.
+		## [param p_is_log] True for a logarithmic scale.
+		## [param p_origin] Pixel of the axis start.
+		## [param p_extent] Pixel length of the axis.
+		## [param p_invert] True when higher values map to lower pixels.
+		func _init(p_min: float, p_max: float, p_is_log: bool, p_origin: float, p_extent: float, p_invert: bool) -> void:
+			_is_log = p_is_log
+			if p_min >= p_max or p_extent <= 0.0:
+				_degenerate = true
+				_fallback_px = p_origin
+				return
+
+			var start_px: float = p_origin + p_extent if p_invert else p_origin
+			var signed_extent: float = -p_extent if p_invert else p_extent
+			var domain_min: float = log(p_min) if p_is_log else p_min
+			var domain_max: float = log(p_max) if p_is_log else p_max
+			_fallback_px = start_px
+			_scale_px = signed_extent / (domain_max - domain_min)
+			_offset_px = start_px - domain_min * _scale_px
+
+		## Returns the axis pixel of [param p_value].
+		func to_px(p_value: float) -> float:
+			if _degenerate:
+				return _fallback_px
+			if _is_log:
+				if p_value <= 0.0:
+					push_error("AxisMapping.to_px(): a logarithmic axis requires a strictly positive value (value=%f)" % p_value)
+					return _fallback_px
+				return _offset_px + log(p_value) * _scale_px
+			return _offset_px + p_value * _scale_px
+
+
+	## Per-pane layout outputs computed by [method update].
+	class PaneLayout extends RefCounted:
+		## The final data-area rectangle for this pane, in pane-local pixel
+		## coordinates.
+		var pane_rect: Rect2 = Rect2()
+
+		## Tick sequences for y axes on this pane, keyed by [enum AxisId].
+		## Only populated for y axes that have both a config and series data.
+		var y_ticks: Dictionary[AxisId, TickSequence] = {}
+
+		## Transform for the primary x axis on this pane.
+		var x_mapping: AxisMapping = null
+
+		## Transforms for the y axes on this pane, keyed by [enum AxisId].
+		## Only populated for y axes that have a domain.
+		var y_mappings: Dictionary[AxisId, AxisMapping] = {}
+
+		## Zero-based index of this pane within the pane list. Input.
+		var pane_index: int = 0
+
+		## True when this pane draws the primary x axis (ticks and labels).
+		var draws_x: bool = false
+
+		## True when this pane draws the secondary x axis.
+		var draws_secondary_x: bool = false
+
+		## Space this pane reserves along the stacking direction, in pixels.
+		## It is the part of the view rect that [member pane_rect] does not
+		## cover along that direction.
+		var stack_reservation_px: float = 0.0
+
+	## Array of per-pane layout results, one per pane.
+	## Rebuilt by [method update].
+	var pane_layouts: Array[PaneLayout] = []
+
+	## Tick sequence for the primary x axis, or null when the axis is
+	## categorical or absent. Shared across all panes (the x domain is global).
+	## Rebuilt by [method update].
+	var x_ticks: TickSequence = null
+
+	## Tick sequence for the secondary x axis, or null when the plot has no
+	## secondary x axis or when its range is invalid.
+	## Rebuilt by [method update].
+	var secondary_x_ticks: TickSequence = null
+
+	## Indices of visible category labels for the primary x axis.
+	## Empty means all are visible. Rebuilt by [method update].
+	var x_categorical_visible: PackedInt32Array = PackedInt32Array()
+
+	## The secondary x axis transform over the current primary x range.
+	## Null when the plot has no secondary x axis. Rebuilt by [method update].
+	var _secondary_x_transform: SecondaryXTransform = null
+
+	## The secondary x range and ticks of the last valid range. While the range
+	## is invalid, they keep the space the secondary x axis takes, so the plot
+	## does not jump. The ticks are null before the first valid range.
+	var _secondary_x_range_min: float = 0.0
+	var _secondary_x_range_max: float = 1.0
+	var _last_valid_secondary_x_ticks: TickSequence = null
+
+	## True once an invalid secondary x range has been reported. A new layout
+	## comes with each plot_xy() call, which arms the warning again.
+	var _has_warned_invalid_secondary_x_range: bool = false
+
+	## Per-pane view rectangles (the full pane area before insets).
+	## Set via [method set_pane_view_rects] before calling [method update].
+	## Each rect has origin (0,0) and the size of the pane.
+	var _pane_view_rects: Array[Rect2] = []
+
+	## Per-pane positions in PaneStack-local coordinates.
+	## Set via [method set_pane_positions_in_stack] before calling [method update].
+	## Used to compute [member data_area_union].
+	var _pane_positions_in_stack: Array[Vector2] = []
+
+	## The union of all per-pane data area rects, in PaneStack-local coordinates.
+	## Rebuilt by [method update].
+	var data_area_union: Rect2 = Rect2()
+
+	## True when the x axis is on a horizontal edge (BOTTOM or TOP).
+	## False when the x axis is on a vertical edge (LEFT or RIGHT).
+	## Set at the beginning of [method update] and used by mapping and
+	## measurement functions to pick the correct screen dimension.
+	## Rebuilt by [method update].
+	var _x_is_horizontal: bool = true
+
+
+	## Creates a new layout bound to the given domain.
+	## [param p_domain] The domain that supplies axis ranges and series info.
+	func _init(p_domain: XYDomain) -> void:
+		domain = p_domain
+
+
+	## Sets the per-pane view rectangles. Must be called before [method update].
+	## [param p_rects] One Rect2 per pane, each with origin (0,0) and the pane
+	##   pane's pixel size.
+	func set_pane_view_rects(p_rects: Array[Rect2]) -> void:
+		_pane_view_rects = p_rects
+
+
+	## Sets the per-pane positions in PaneStack-local coordinates.
+	## Must be called before [method update].
+	## [param p_positions] One Vector2 per pane, the position of each pane
+	##   pane within the PaneStack.
+	func set_pane_positions_in_stack(p_positions: Array[Vector2]) -> void:
+		_pane_positions_in_stack = p_positions
+
+
+	## Recomputes all pane layouts: axis-to-edge resolution, tick sequences,
+	## and pane rectangles. Call after setting [member style] and
+	## [method set_pane_view_rects].
+	func update() -> void:
+		pane_layouts.clear()
+		x_ticks = null
+		secondary_x_ticks = null
+		x_categorical_visible = PackedInt32Array()
+		_secondary_x_transform = null
+
+		_x_is_horizontal = Axis.is_horizontal(domain.config.x_axis_id)
+
+		var pane_count := domain.get_pane_count()
+		if pane_count == 0:
+			return
+		while _pane_view_rects.size() < pane_count:
+			_pane_view_rects.append(Rect2())
+
+		# ---- Axis-to-edge resolution ----
+		# Determine which edges draw which axis for every pane.
+
+		var draws_bottom: Array[bool] = []
+		var draws_top: Array[bool] = []
+		var draws_left: Array[bool] = []
+		var draws_right: Array[bool] = []
+
+		var x_axis_id := domain.config.x_axis_id
+		var secondary_x_position := Axis.get_opposite(x_axis_id)
+		var has_x := false
+		for i in range(pane_count):
+			if domain.series_assignment.get_x_axis_series_count(i) > 0:
+				has_x = (domain.config.x_axis != null)
+				break
+		var has_secondary_x := (domain.config.secondary_x_axis != null)
+		var y_axes: Array[AxisId] = Axis.get_orthogonal_axes(x_axis_id)
+
+		for i in range(pane_count):
+			var pl := PaneLayout.new()
+			pl.pane_index = i
+			pane_layouts.append(pl)
+
+			# X axis: drawn on the pane nearest to its edge.
+			var pane_draws_x := _is_pane_nearest_to_edge(i, pane_count, x_axis_id) and has_x
+			var pane_draws_secondary_x := _is_pane_nearest_to_edge(i, pane_count, secondary_x_position) and has_secondary_x
+
+			# Build per-edge draw flags from x, secondary_x, and y contributions.
+			# Each edge starts false and is set true if any axis occupies it.
+			var edge_flags := {
+				AxisId.BOTTOM: false,
+				AxisId.TOP: false,
+				AxisId.LEFT: false,
+				AxisId.RIGHT: false,
+			}
+
+			# X axis occupies x_axis_id edge.
+			if pane_draws_x:
+				edge_flags[x_axis_id] = true
+			# Secondary x axis occupies the opposite edge.
+			if pane_draws_secondary_x:
+				edge_flags[secondary_x_position] = true
+
+			# Y axes occupy the two positions orthogonal to x.
+			for y_axis_id in y_axes:
+				var y_axis_domain := domain.get_pane_domain(i).get_y_axis_domain(y_axis_id)
+				var has_cfg := (y_axis_domain != null and y_axis_domain.config != null)
+				var has_series := domain.series_assignment.get_y_axis_series_count(i, y_axis_id) > 0
+				if has_cfg and has_series:
+					edge_flags[y_axis_id] = true
+
+			draws_bottom.append(edge_flags[AxisId.BOTTOM])
+			draws_top.append(edge_flags[AxisId.TOP])
+			draws_left.append(edge_flags[AxisId.LEFT])
+			draws_right.append(edge_flags[AxisId.RIGHT])
+
+			pl.draws_x = pane_draws_x
+			pl.draws_secondary_x = pane_draws_secondary_x
+
+		# ---- Tick computation ----
+
+		_compute_x_ticks(has_x, has_secondary_x)
+
+		var per_pane_y_axis_extent_px: Array[float] = []
+		for i in range(pane_count):
+			per_pane_y_axis_extent_px.append(
+				_estimate_available_y_extent(i, draws_bottom, draws_top, draws_left, draws_right))
+		_compute_y_ticks(draws_bottom, draws_top, draws_left, draws_right, per_pane_y_axis_extent_px, y_axes)
+
+		_compute_all_pane_rects(draws_bottom, draws_top, draws_left, draws_right, y_axes)
+
+		_compute_axis_mappings(y_axes)
+
+
+	## Returns true if [param p_pane_index] is the pane closest to [param p_edge].
+	## In a vertical stack (x horizontal), TOP is nearest pane 0, BOTTOM is nearest pane N-1.
+	## In a horizontal stack (x vertical), LEFT is nearest pane 0, RIGHT is nearest pane N-1.
+	static func _is_pane_nearest_to_edge(p_pane_index: int, p_pane_count: int, p_edge: AxisId) -> bool:
+		match p_edge:
+			AxisId.BOTTOM, AxisId.RIGHT:
+				return p_pane_index == p_pane_count - 1
+			AxisId.TOP, AxisId.LEFT:
+				return p_pane_index == 0
+		return false
+
+
+	## Looks up whether an axis is drawn on the given edge position.
+	static func _draws_on_edge(p_edge: AxisId,
+			p_draws_bottom: Array[bool], p_draws_top: Array[bool],
+			p_draws_left: Array[bool], p_draws_right: Array[bool],
+			p_pane_index: int) -> bool:
+		match p_edge:
+			AxisId.BOTTOM: return p_draws_bottom[p_pane_index]
+			AxisId.TOP:    return p_draws_top[p_pane_index]
+			AxisId.LEFT:   return p_draws_left[p_pane_index]
+			AxisId.RIGHT:  return p_draws_right[p_pane_index]
+		return false
+
+
+	## Returns the PaneLayout for the given pane index.
+	## [param p_pane_index] Zero-based pane index.
+	func get_pane_layout(p_pane_index: int) -> PaneLayout:
+		return pane_layouts[p_pane_index]
+
+
+	## True once [method update] has produced the pane layouts. None exist
+	## before the first update, so a caller that can run earlier asks this
+	## and skips its work.
+	func has_pane_layouts() -> bool:
+		return not pane_layouts.is_empty()
+
+
+	## Returns the pane data-area rectangle in pane-local pixels.
+	## [param p_pane_index] Zero-based pane index.
+	func get_pane_rect(p_pane_index: int = 0) -> Rect2:
+		return pane_layouts[p_pane_index].pane_rect
+
+	################################################################################################
+	# Axis mapping
+	################################################################################################
+
+	## Returns the transform from an x-axis data value to a pixel along the x axis direction.
+	## [param p_pane_index] Zero-based pane index.
+	func get_x_mapping(p_pane_index: int) -> AxisMapping:
+		return pane_layouts[p_pane_index].x_mapping
+
+
+	## Returns the transform from an y-axis data value to a pixel along the y axis direction.
+	## [param p_pane_index] Zero-based pane index.
+	## [param p_y_axis_id] Which y axis.
+	func get_y_mapping(p_pane_index: int, p_y_axis_id: AxisId) -> AxisMapping:
+		return pane_layouts[p_pane_index].y_mappings[p_y_axis_id]
+
+
+	## Maps an x-axis data value to a pixel coordinate along the x axis direction.
+	## Returns a screen-X pixel when x is horizontal, or screen-Y when x is vertical.
+	## [param p_pane_index] Zero-based pane index.
+	## [param p_x] Data value on the x axis.
+	func map_x_to_px(p_pane_index: int, p_x: float) -> float:
+		return pane_layouts[p_pane_index].x_mapping.to_px(p_x)
+
+
+	## Maps a secondary x-axis value to a pixel coordinate along the x axis
+	## direction. The pixel is the one of the primary x value whose transform
+	## gives [param p_x], so both axes agree on every position.
+	## Requires a valid secondary x range, see [member secondary_x_ticks].
+	## [param p_pane_index] Zero-based pane index.
+	## [param p_x] Value on the secondary x axis.
+	func map_secondary_x_to_px(p_pane_index: int, p_x: float) -> float:
+		return pane_layouts[p_pane_index].x_mapping.to_px(_secondary_x_transform.find_primary_value(p_x))
+
+
+	## Maps a categorical x-axis index to the pixel coordinate at the center of
+	## its slot along the x axis direction.
+	## [param p_pane_index] Zero-based pane index.
+	## [param p_category_index] Zero-based category index.
+	func map_x_category_center_to_px(p_pane_index: int, p_category_index: int) -> float:
+		var pane_layout := pane_layouts[p_pane_index]
+		# x horizontal: categories span screen-X. x vertical: categories span screen-Y.
+		var origin: float = pane_layout.pane_rect.position.x if _x_is_horizontal else pane_layout.pane_rect.position.y
+		var extent: float = pane_layout.pane_rect.size.x if _x_is_horizontal else pane_layout.pane_rect.size.y
+		var nb_categories := domain.x_categories.size()
+		if nb_categories <= 0 or extent <= 0.0:
+			return origin
+		var step_px := extent / float(nb_categories)
+		var center := origin + (float(p_category_index) + 0.5) * step_px
+		var x_axis_cfg := domain.config.x_axis
+		var flip: bool = (not _x_is_horizontal) != (x_axis_cfg != null and x_axis_cfg.inverted)
+		if flip:
+			center = origin + extent - (center - origin)
+		return center
+
+
+	## Maps a categorical x-axis boundary (0 through category count) to pixels.
+	func map_x_category_boundary_to_px(p_pane_index: int, p_boundary_index: int) -> float:
+		var pane_layout := pane_layouts[p_pane_index]
+		var origin: float = pane_layout.pane_rect.position.x if _x_is_horizontal else pane_layout.pane_rect.position.y
+		var extent: float = pane_layout.pane_rect.size.x if _x_is_horizontal else pane_layout.pane_rect.size.y
+		var count := domain.x_categories.size()
+		if count <= 0 or extent <= 0.0:
+			return origin
+		var fraction := clampf(float(p_boundary_index) / float(count), 0.0, 1.0)
+		var flip: bool = (not _x_is_horizontal) != domain.config.x_axis.inverted
+		return origin + extent * (1.0 - fraction if flip else fraction)
+
+
+	## Maps a y-axis data value to a pixel coordinate along the y axis direction.
+	## Returns a screen-Y pixel when x is horizontal, or screen-X when x is vertical.
+	## [param p_pane_index] Zero-based pane index.
+	## [param p_value] Data value on the y axis.
+	## [param p_y_axis_id] Which y axis (one of the two orthogonal positions).
+	func map_y_to_px(p_pane_index: int, p_value: float, p_y_axis_id: AxisId) -> float:
+		return pane_layouts[p_pane_index].y_mappings[p_y_axis_id].to_px(p_value)
+
+
+	## Returns the pixel coordinate of y=0 on the given y axis.
+	## [param p_pane_index] Zero-based pane index.
+	## [param p_y_axis_id] Which y axis.
+	func get_y_zero_px(p_pane_index: int, p_y_axis_id: AxisId) -> float:
+		return map_y_to_px(p_pane_index, 0.0, p_y_axis_id)
+
+
+	## Assembles a screen-space [Vector2] from two pixel coordinates that are
+	## already expressed along the x-axis and y-axis directions respectively.
+	##
+	## [param p_x_axis_px] Pixel coordinate along the x-axis direction, as
+	##                     returned by [method map_x_to_px] or
+	##                     [method map_x_category_center_to_px].
+	## [param p_y_axis_px] Pixel coordinate along the y-axis direction, as
+	##                     returned by [method map_y_to_px].
+	##
+	## When the x axis is horizontal, the x-axis direction is screen-X and
+	## the y-axis direction is screen-Y, so the values map straight through.
+	## When the x axis is vertical, the two are swapped.
+	##
+	## Note: both input values already encode axis inversion and scale
+	## (linear or logarithmic) because those are applied inside the
+	## mapping functions. This helper only performs the orientation swap.
+	func map_point_to_screen(p_x_axis_px: float, p_y_axis_px: float) -> Vector2:
+		if _x_is_horizontal:
+			return Vector2(p_x_axis_px, p_y_axis_px)
+		return Vector2(p_y_axis_px, p_x_axis_px)
+
+	## Converts a whole polyline from axis space to screen space. Each input
+	## vertex carries the x-axis pixel in [member Vector2.x] and the y-axis
+	## pixel in [member Vector2.y], the same layout [method map_point_to_screen]
+	## expects. Vertex order and count are preserved, so indices into the input
+	## stay valid for the returned array.
+	func map_points_to_screen(p_axis_points: PackedVector2Array) -> PackedVector2Array:
+		if _x_is_horizontal:
+			return p_axis_points
+		var screen_points := PackedVector2Array()
+		screen_points.resize(p_axis_points.size())
+		for i in range(p_axis_points.size()):
+			var p := p_axis_points[i]
+			screen_points[i] = Vector2(p.y, p.x)
+		return screen_points
+
+	func map_screen_to_point(p_screen_coords: Vector2) -> Vector2:
+		if _x_is_horizontal:
+			return Vector2(p_screen_coords.x, p_screen_coords.y)
+		return Vector2(p_screen_coords.y, p_screen_coords.x)
+
+	################################################################################################
+	# Categorical label visibility
+	################################################################################################
+
+	## Returns true if the category label at [param p_category_index] should be
+	## shown for the primary x axis on pane [param p_pane_index].
+	func should_show_x_categorical_label(_p_pane_index: int, p_category_index: int) -> bool:
+		if x_categorical_visible.is_empty():
+			return true
+		for idx in x_categorical_visible:
+			if idx == p_category_index:
+				return true
+		return false
+
+
+	################################################################################################
+	# Private
+	################################################################################################
+
+	## Returns the AxisDomain for a y axis on a given pane, or null.
+	func _get_y_axis_domain(p_pane_index: int, p_y_axis_id: AxisId) -> AxisDomain:
+		if p_pane_index < 0 or p_pane_index >= domain.get_pane_count():
+			return null
+		var pane_y_domains := domain.get_pane_domain(p_pane_index)
+		return pane_y_domains.get_y_axis_domain(p_y_axis_id)
+
+
+	## Returns the TauAxisConfig for a y axis on a given pane, or null.
+	func _get_y_axis_config(p_pane_index: int, p_y_axis_id: AxisId) -> TauAxisConfig:
+		var y_axis_domain := _get_y_axis_domain(p_pane_index, p_y_axis_id)
+		if y_axis_domain == null:
+			return null
+		return y_axis_domain.config
+
+
+	## Resolves one [AxisMapping] per axis and per pane from the pane rectangles and the domain bounds.
+	func _compute_axis_mappings(p_y_axes: Array[AxisId]) -> void:
+		var x_axis_cfg := domain.config.x_axis
+		var x_is_log := x_axis_cfg.scale == TauAxisConfig.Scale.LOGARITHMIC
+		# Notes:
+		# - screen-X increases rightward
+		# - screen-Y increases downward
+		# As a consequence, when the x axis is vertical an inversion is required
+		# to get x min at the bottom and x max at the top.
+		# The user-facing "inverted" flag flips the direction on top of the
+		# orientation-based default (XOR logic).
+		var x_flip: bool = (not _x_is_horizontal) != x_axis_cfg.inverted
+
+		for i in range(pane_layouts.size()):
+			var pane_layout := pane_layouts[i]
+			var pane_rect := pane_layout.pane_rect
+
+			# x horizontal: the x axis runs along screen-X and the y axes along
+			# screen-Y. x vertical: the two are swapped.
+			var x_origin: float = pane_rect.position.x if _x_is_horizontal else pane_rect.position.y
+			var x_extent: float = pane_rect.size.x if _x_is_horizontal else pane_rect.size.y
+			var y_origin: float = pane_rect.position.y if _x_is_horizontal else pane_rect.position.x
+			var y_extent: float = pane_rect.size.y if _x_is_horizontal else pane_rect.size.x
+
+			pane_layout.x_mapping = AxisMapping.new(
+				domain.x_axis_domain.min_val, domain.x_axis_domain.max_val, x_is_log,
+				x_origin, x_extent, x_flip)
+
+			for y_axis_id in p_y_axes:
+				var y_axis_domain := _get_y_axis_domain(i, y_axis_id)
+				if y_axis_domain == null:
+					continue
+				# x horizontal: y is vertical, so invert (higher values = lower
+				# screen-Y = up). x vertical: y is horizontal, values increase
+				# with screen-X, no inversion. Same XOR with "inverted" as x.
+				var y_flip: bool = _x_is_horizontal != y_axis_domain.config.inverted
+				pane_layout.y_mappings[y_axis_id] = AxisMapping.new(
+					y_axis_domain.min_val, y_axis_domain.max_val,
+					y_axis_domain.scale == TauAxisConfig.Scale.LOGARITHMIC,
+					y_origin, y_extent, y_flip)
+
+
+	## Returns the pixel size (width, height) of a label string using the current style font.
+	func _measure_label(p_label: String) -> Vector2:
+		return style.get_label_font().get_string_size(p_label, HORIZONTAL_ALIGNMENT_LEFT, -1.0, style.label_font_size)
+
+
+	## Applies the primary x axis format_tick_label callback to a label string.
+	func _decorate_x_label(p_text: String) -> String:
+		var x_axis_cfg := domain.config.x_axis
+		if x_axis_cfg == null or x_axis_cfg.format_tick_label.is_null():
+			return p_text
+		return x_axis_cfg.format_tick_label.call(p_text)
+
+
+	## Applies the secondary x axis format_tick_label callback to a label string.
+	func _decorate_secondary_x_label(p_text: String) -> String:
+		var secondary_x_axis_cfg := domain.config.secondary_x_axis
+		if secondary_x_axis_cfg == null or secondary_x_axis_cfg.format_tick_label.is_null():
+			return p_text
+		return secondary_x_axis_cfg.format_tick_label.call(p_text)
+
+
+	## Applies the y axis format_tick_label callback to a label string.
+	func _decorate_y_label(p_text: String, p_pane_index: int, p_y_axis_id: AxisId) -> String:
+		var y_axis_config := _get_y_axis_config(p_pane_index, p_y_axis_id)
+		if y_axis_config == null or y_axis_config.format_tick_label.is_null():
+			return p_text
+		return y_axis_config.format_tick_label.call(p_text)
+
+
+	## Computes x axis tick sequences once.
+	## The x domain is shared across all panes and the x axis length in pixels
+	## is identical for every pane, so one computation is sufficient.
+	## Stores results in [member x_ticks], [member secondary_x_ticks] and
+	## [member x_categorical_visible].
+	func _compute_x_ticks(p_has_x: bool, p_has_secondary_x: bool) -> void:
+		if _pane_view_rects.is_empty():
+			return
+		# All panes share the same extent along x, so any view rect works.
+		# x horizontal: available extent is view rect width. x vertical: height.
+		var view_rect := _pane_view_rects[0]
+		var x_axis_extent_px := view_rect.size.x if _x_is_horizontal else view_rect.size.y
+		if p_has_x:
+			_compute_primary_x_ticks(x_axis_extent_px)
+		if p_has_secondary_x:
+			_compute_secondary_x_ticks(x_axis_extent_px)
+
+
+	## Computes y axis tick sequences for all panes and y axis positions.
+	## [param p_available_y] Per-pane available screen pixels along the y axis direction.
+	## [param p_y_axes] The two AxisId positions orthogonal to x.
+	func _compute_y_ticks(p_draws_bottom: Array[bool], p_draws_top: Array[bool],
+			p_draws_left: Array[bool], p_draws_right: Array[bool],
+			p_available_y: Array[float], p_y_axes: Array[AxisId]) -> void:
+		var pane_count := pane_layouts.size()
+
+		for pane_index in range(pane_count):
+			var pane_layout := pane_layouts[pane_index]
+			var available_y := p_available_y[pane_index]
+			if available_y <= 0.0:
+				continue
+			for y_axis_id in p_y_axes:
+				var draws := _draws_on_edge(y_axis_id,
+					p_draws_bottom, p_draws_top, p_draws_left, p_draws_right, pane_index)
+				if not draws:
+					continue
+
+				var y_axis_domain := _get_y_axis_domain(pane_index, y_axis_id)
+				var y_axis_config := y_axis_domain.config
+
+				# The TickResolver runs overlap detection along the y axis screen
+				# direction. It needs the label extent along that direction as the
+				# .x component of the returned Vector2.
+				#
+				# x horizontal: y axis is vertical (screen-Y). The label extent
+				#   along screen-Y is the text height (s.y), so swap to (s.y, s.x).
+				# x vertical: y axis is horizontal (screen-X). The label extent
+				#   along screen-X is the text width (s.x), so no swap needed.
+				var y_measure_func: Callable
+				if _x_is_horizontal:
+					y_measure_func = func(label: String) -> Vector2:
+						var s := _measure_label(_decorate_y_label(label, pane_index, y_axis_id))
+						return Vector2(s.y, s.x)
+				else:
+					y_measure_func = func(label: String) -> Vector2:
+						return _measure_label(_decorate_y_label(label, pane_index, y_axis_id))
+				var ticks := TickResolver.compute_ticks_for_continuous_axis(
+					y_axis_domain.min_val, y_axis_domain.max_val,
+					y_axis_config.scale, y_axis_config.tick_count_preferred, y_axis_config.overlap_strategy,
+					available_y, float(y_axis_config.min_label_spacing_px), y_measure_func)
+				pane_layout.y_ticks[y_axis_id] = ticks
+
+
+	## Returns the number of screen pixels available for the y axis extent.
+	## This is the pane view rect dimension along the y axis direction, minus
+	## the space consumed by x-axis ticks and labels on the perpendicular edges.
+	func _estimate_available_y_extent(p_pane_index: int,
+			p_draws_bottom: Array[bool], p_draws_top: Array[bool],
+			p_draws_left: Array[bool], p_draws_right: Array[bool]) -> float:
+		var view_rect := _pane_view_rects[p_pane_index]
+		var x_axis_id := domain.config.x_axis_id
+		var secondary_x_position := Axis.get_opposite(x_axis_id)
+
+		# The x axis and its secondary sit on edges that are perpendicular to
+		# the y axis direction. We need to subtract the space those edges
+		# reserve for labels from the total y axis extent.
+		var draws_x_edge := _draws_on_edge(x_axis_id,
+			p_draws_bottom, p_draws_top, p_draws_left, p_draws_right, p_pane_index)
+		var draws_secondary_x_edge := _draws_on_edge(secondary_x_position,
+			p_draws_bottom, p_draws_top, p_draws_left, p_draws_right, p_pane_index)
+
+		var x_edge_reserved := 0.0
+		var secondary_x_edge_reserved := 0.0
+		if draws_x_edge:
+			x_edge_reserved = _measure_x_axis_labels(true).x
+		if draws_secondary_x_edge:
+			secondary_x_edge_reserved = _measure_x_axis_labels(false).x
+
+		# Estimate the half-height of a y-axis label to account for endpoint
+		# overshoot into the x-axis reserved space.
+		var label_size := _measure_label("0")
+		# x horizontal: y axis is vertical, overshoot is half the label height.
+		# x vertical: y axis is horizontal, overshoot is half the label width.
+		var y_edge_half_extent := (label_size.y if _x_is_horizontal else label_size.x) * 0.5
+
+		# x horizontal: y axis runs along screen-Y, so available extent is the view height.
+		# x vertical: y axis runs along screen-X, so available extent is the view width.
+		var extent := view_rect.size.y if _x_is_horizontal else view_rect.size.x
+
+		# The x axis edge and secondary x axis edge consume space on two
+		# opposing sides along the y axis direction. Determine which padding
+		# sides correspond to which x-axis edges.
+		#
+		# x horizontal: x axis is on BOTTOM or TOP.
+		#   x_edge is on the same side as x_axis_id (e.g. BOTTOM),
+		#   secondary is on the opposite side (e.g. TOP).
+		#   padding_start = padding along x_axis_id direction.
+		#   padding_end = padding along secondary direction.
+		#
+		# x vertical: x axis is on LEFT or RIGHT.
+		#   Same logic, but using left/right padding instead of top/bottom.
+		var padding_toward_x: float
+		var padding_toward_secondary_x: float
+		match x_axis_id:
+			AxisId.BOTTOM:
+				padding_toward_x = float(style.padding_bottom_px)
+				padding_toward_secondary_x = float(style.padding_top_px)
+			AxisId.TOP:
+				padding_toward_x = float(style.padding_top_px)
+				padding_toward_secondary_x = float(style.padding_bottom_px)
+			AxisId.LEFT:
+				padding_toward_x = float(style.padding_left_px)
+				padding_toward_secondary_x = float(style.padding_right_px)
+			AxisId.RIGHT:
+				padding_toward_x = float(style.padding_right_px)
+				padding_toward_secondary_x = float(style.padding_left_px)
+			_:
+				padding_toward_x = 0.0
+				padding_toward_secondary_x = 0.0
+
+		extent -= x_edge_reserved + secondary_x_edge_reserved + padding_toward_x + padding_toward_secondary_x
+		var extra_toward_x := maxf(y_edge_half_extent - x_edge_reserved - padding_toward_x, 0.0)
+		var extra_toward_secondary_x := maxf(y_edge_half_extent - secondary_x_edge_reserved - padding_toward_secondary_x, 0.0)
+		extent -= extra_toward_x + extra_toward_secondary_x
+		return maxf(extent, 0.0)
+
+
+	## Computes the tick sequence or the categorical label visibility of the
+	## primary x axis.
+	## [param p_x_axis_extent_px] Available axis length in pixels.
+	func _compute_primary_x_ticks(p_x_axis_extent_px: float) -> void:
+		var x_axis_cfg := domain.config.x_axis
+		var measure_label_func := func(label: String) -> Vector2: return _measure_label(_decorate_x_label(label))
+		match x_axis_cfg.type:
+			TauAxisConfig.Type.CATEGORICAL:
+				x_categorical_visible = TickResolver.compute_categorical_label_visibility(
+					domain.x_categories, x_axis_cfg.overlap_strategy, p_x_axis_extent_px,
+					float(x_axis_cfg.min_label_spacing_px), measure_label_func)
+			TauAxisConfig.Type.CONTINUOUS:
+				x_ticks = TickResolver.compute_ticks_for_continuous_axis(
+					domain.x_axis_domain.min_val, domain.x_axis_domain.max_val,
+					x_axis_cfg.scale, x_axis_cfg.tick_count_preferred,
+					x_axis_cfg.overlap_strategy, p_x_axis_extent_px,
+					float(x_axis_cfg.min_label_spacing_px), measure_label_func)
+
+
+	## Computes the tick sequence of the secondary x axis, or leaves it null
+	## when the secondary x range is invalid.
+	##
+	## The tick values are picked over the secondary x range, in the secondary
+	## scale. Each tick sits at the primary x position whose transform gives its
+	## value, and the overlap checks read the labels at those positions.
+	## [param p_x_axis_extent_px] Available axis length in pixels.
+	func _compute_secondary_x_ticks(p_x_axis_extent_px: float) -> void:
+		var secondary_cfg := domain.config.secondary_x_axis
+		_secondary_x_transform = SecondaryXTransform.new(domain.config.secondary_x_axis_transform,
+			domain.x_axis_domain.min_val, domain.x_axis_domain.max_val,
+			domain.config.x_axis.scale == TauAxisConfig.Scale.LOGARITHMIC)
+
+		var invalid_reason := _secondary_x_transform.find_invalid_reason(
+			secondary_cfg.scale == TauAxisConfig.Scale.LOGARITHMIC)
+		if not invalid_reason.is_empty():
+			_warn_invalid_secondary_x_range(invalid_reason)
+			return
+
+		_secondary_x_range_min = _secondary_x_transform.get_secondary_min()
+		_secondary_x_range_max = _secondary_x_transform.get_secondary_max()
+		secondary_x_ticks = TickResolver.compute_ticks_for_continuous_axis(
+			_secondary_x_range_min, _secondary_x_range_max,
+			secondary_cfg.scale, secondary_cfg.tick_count_preferred,
+			secondary_cfg.overlap_strategy, p_x_axis_extent_px,
+			float(secondary_cfg.min_label_spacing_px),
+			func(label: String) -> Vector2: return _measure_label(_decorate_secondary_x_label(label)),
+			func(value: float) -> float: return _secondary_x_transform.find_primary_fraction(value) * p_x_axis_extent_px)
+		_last_valid_secondary_x_ticks = secondary_x_ticks
+
+
+	func _warn_invalid_secondary_x_range(p_reason: String) -> void:
+		if _has_warned_invalid_secondary_x_range:
+			return
+		_has_warned_invalid_secondary_x_range = true
+		push_warning("TauPlot: the secondary x axis hides its labels over the primary x range [%f, %f]: %s. They come back once the range is valid again." % [
+			domain.x_axis_domain.min_val, domain.x_axis_domain.max_val, p_reason])
+
+
+	## Computes the pane_rect for every pane by measuring label/tick space on
+	## each of the four physical edges and shrinking the view rect inward.
+	##
+	## For each edge, the function determines what axis occupies it (x,
+	## secondary x, y, or nothing) and measures the reserved perpendicular
+	## depth. Endpoint overshoot (half_extent) from one axis pair can push
+	## into the reserved space of the perpendicular pair.
+	##
+	## Edges parallel to the stacking direction are aligned across panes
+	## (maximum reserved depth). Edges perpendicular to stacking are per-pane.
+	## x horizontal (vertical stacking): LEFT and RIGHT are aligned.
+	## x vertical (horizontal stacking): TOP and BOTTOM are aligned.
+	func _compute_all_pane_rects(p_draws_bottom: Array[bool], p_draws_top: Array[bool],
+			p_draws_left: Array[bool], p_draws_right: Array[bool],
+			p_y_axes: Array[AxisId]) -> void:
+		var pane_count := pane_layouts.size()
+		var x_axis_id := domain.config.x_axis_id
+		var secondary_x_position := Axis.get_opposite(x_axis_id)
+
+		# Per-pane reserved depth for each physical edge and half_extent per axis pair.
+		var per_pane_left_reserved: Array[float] = []
+		var per_pane_right_reserved: Array[float] = []
+		var per_pane_bottom_reserved: Array[float] = []
+		var per_pane_top_reserved: Array[float] = []
+		# x axis half_extent overshoots into the two y-axis edges.
+		var per_pane_x_half_extent: Array[float] = []
+		# y axis half_extent overshoots into the two x-axis edges.
+		var per_pane_y_half_extent: Array[float] = []
+
+		for i in range(pane_count):
+			var pane_layout := pane_layouts[i]
+
+			# Measure each edge based on what axis occupies it.
+			# Use a dictionary to accumulate reserved depth per edge.
+			var reserved := {
+				AxisId.LEFT: 0.0,
+				AxisId.RIGHT: 0.0,
+				AxisId.BOTTOM: 0.0,
+				AxisId.TOP: 0.0,
+			}
+			var x_half_extent := 0.0
+			var y_half_extent := 0.0
+
+			# Process x axis edge.
+			var x_edge_draws := _draws_on_edge(x_axis_id,
+				p_draws_bottom, p_draws_top, p_draws_left, p_draws_right, i)
+			if x_edge_draws:
+				var result := _measure_x_axis_labels(true)
+				reserved[x_axis_id] = result.x
+				x_half_extent = max(x_half_extent, result.y)
+
+			# Process secondary x axis edge.
+			var secondary_x_edge_draws := _draws_on_edge(secondary_x_position,
+				p_draws_bottom, p_draws_top, p_draws_left, p_draws_right, i)
+			if secondary_x_edge_draws:
+				var result := _measure_x_axis_labels(false)
+				reserved[secondary_x_position] = result.x
+				x_half_extent = max(x_half_extent, result.y)
+
+			# Process y axis edges.
+			for y_axis_id in p_y_axes:
+				var y_draws := _draws_on_edge(y_axis_id,
+					p_draws_bottom, p_draws_top, p_draws_left, p_draws_right, i)
+				if not y_draws or y_axis_id not in pane_layout.y_ticks:
+					continue
+				var y_ticks: TickSequence = pane_layout.y_ticks[y_axis_id]
+				var result := _measure_y_axis_labels(y_ticks, i, y_axis_id)
+				reserved[y_axis_id] = result.x
+				y_half_extent = max(y_half_extent, result.y)
+
+			per_pane_left_reserved.append(reserved[AxisId.LEFT])
+			per_pane_right_reserved.append(reserved[AxisId.RIGHT])
+			per_pane_bottom_reserved.append(reserved[AxisId.BOTTOM])
+			per_pane_top_reserved.append(reserved[AxisId.TOP])
+			per_pane_x_half_extent.append(x_half_extent)
+			per_pane_y_half_extent.append(y_half_extent)
+
+		# Aligned edges: take max across all panes for edges parallel to stacking.
+		# x horizontal (vertical stacking): LEFT and RIGHT are aligned.
+		# x vertical (horizontal stacking): TOP and BOTTOM are aligned.
+		var aligned_a_reserved := 0.0  # First aligned edge (LEFT or TOP).
+		var aligned_b_reserved := 0.0  # Second aligned edge (RIGHT or BOTTOM).
+		# x_half_extent overshoots into y-axis edges. When y is on LEFT/RIGHT
+		# (x horizontal), x_half_extent is aligned. When y is on BOTTOM/TOP
+		# (x vertical), x_half_extent is aligned.
+		var max_x_half_extent := 0.0
+		for i in range(pane_count):
+			max_x_half_extent = max(max_x_half_extent, per_pane_x_half_extent[i])
+			if _x_is_horizontal:
+				aligned_a_reserved = max(aligned_a_reserved, per_pane_left_reserved[i])
+				aligned_b_reserved = max(aligned_b_reserved, per_pane_right_reserved[i])
+			else:
+				aligned_a_reserved = max(aligned_a_reserved, per_pane_top_reserved[i])
+				aligned_b_reserved = max(aligned_b_reserved, per_pane_bottom_reserved[i])
+
+		for i in range(pane_count):
+			var full := _pane_view_rects[i]
+
+			# Resolve final reserved depth per edge. Aligned edges use the max.
+			var left_r: float
+			var right_r: float
+			var top_r: float
+			var bottom_r: float
+			if _x_is_horizontal:
+				left_r = aligned_a_reserved
+				right_r = aligned_b_reserved
+				top_r = per_pane_top_reserved[i]
+				bottom_r = per_pane_bottom_reserved[i]
+			else:
+				left_r = per_pane_left_reserved[i]
+				right_r = per_pane_right_reserved[i]
+				top_r = aligned_a_reserved
+				bottom_r = aligned_b_reserved
+
+			# Start with the pane shrunk inward from all four sides.
+			var pane_pos := full.position + Vector2(
+				left_r + float(style.padding_left_px),
+				top_r + float(style.padding_top_px))
+			var pane_size := full.size - Vector2(
+				left_r + right_r + float(style.padding_left_px + style.padding_right_px),
+				top_r + bottom_r + float(style.padding_top_px + style.padding_bottom_px))
+
+			# Overshoot corrections.
+			#
+			# x_half_extent overshoots into the two y-axis edges (perpendicular to x).
+			# x horizontal: x_half_extent is horizontal, overshoots into LEFT and RIGHT.
+			# x vertical: x_half_extent is vertical, overshoots into TOP and BOTTOM.
+			#
+			# y_half_extent overshoots into the two x-axis edges (perpendicular to y).
+			# x horizontal: y_half_extent is vertical, overshoots into TOP and BOTTOM.
+			# x vertical: y_half_extent is horizontal, overshoots into LEFT and RIGHT.
+			var y_half := per_pane_y_half_extent[i]
+
+			if _x_is_horizontal:
+				# x_half_extent overshoots horizontally into LEFT and RIGHT.
+				var extra_left := maxf(max_x_half_extent - left_r - float(style.padding_left_px), 0.0)
+				var extra_right := maxf(max_x_half_extent - right_r - float(style.padding_right_px), 0.0)
+				pane_pos.x += extra_left
+				pane_size.x -= extra_left + extra_right
+				# y_half_extent overshoots vertically into TOP and BOTTOM.
+				var extra_top := maxf(y_half - top_r - float(style.padding_top_px), 0.0)
+				var extra_bottom := maxf(y_half - bottom_r - float(style.padding_bottom_px), 0.0)
+				pane_pos.y += extra_top
+				pane_size.y -= extra_top + extra_bottom
+			else:
+				# x_half_extent overshoots vertically into TOP and BOTTOM.
+				var extra_top := maxf(max_x_half_extent - top_r - float(style.padding_top_px), 0.0)
+				var extra_bottom := maxf(max_x_half_extent - bottom_r - float(style.padding_bottom_px), 0.0)
+				pane_pos.y += extra_top
+				pane_size.y -= extra_top + extra_bottom
+				# y_half_extent overshoots horizontally into LEFT and RIGHT.
+				var extra_left := maxf(y_half - left_r - float(style.padding_left_px), 0.0)
+				var extra_right := maxf(y_half - right_r - float(style.padding_right_px), 0.0)
+				pane_pos.x += extra_left
+				pane_size.x -= extra_left + extra_right
+
+			# Read from the size computed above, so the two cannot disagree.
+			# Taken before the clamp, since a pane with no room left still
+			# reserves the same space.
+			pane_layouts[i].stack_reservation_px = (full.size.y - pane_size.y) if _x_is_horizontal else (full.size.x - pane_size.x)
+
+			pane_size.x = max(pane_size.x, 0.0)
+			pane_size.y = max(pane_size.y, 0.0)
+			pane_layouts[i].pane_rect = Rect2(pane_pos, pane_size)
+
+		# Compute union of all pane data areas in PaneStack-local coordinates.
+		if pane_count > 0 and _pane_positions_in_stack.size() >= pane_count:
+			var first_rect := pane_layouts[0].pane_rect
+			var first_offset := _pane_positions_in_stack[0]
+			data_area_union = Rect2(first_offset + first_rect.position, first_rect.size)
+			for i in range(1, pane_count):
+				var pr := pane_layouts[i].pane_rect
+				var offset := _pane_positions_in_stack[i]
+				data_area_union = data_area_union.merge(
+					Rect2(offset + pr.position, pr.size))
+		else:
+			data_area_union = Rect2()
+
+
+	## Returns the values of the ticks that carry a label, in ascending order.
+	## A label sits on a major tick or on a minor tick, so both ranks are read.
+	## The two ranks interleave along the axis, so the merged list is sorted
+	## back into axis order.
+	static func _collect_labeled_tick_values(p_ticks: TickSequence) -> Array[float]:
+		var values: Array[float] = []
+		for index in p_ticks.labeled_major_indices:
+			values.append(p_ticks.major_ticks[index])
+		for index in p_ticks.labeled_minor_indices:
+			values.append(p_ticks.minor_ticks[index])
+		values.sort()
+		return values
+
+
+	## Measures y-axis labels and returns Vector2(reserved_depth, half_extent).
+	## reserved_depth: space consumed perpendicular to the y axis direction
+	##   (label extent across the edge + tick gap + tick perpendicular size).
+	## half_extent: half of the label extent along the y axis direction at
+	##   endpoints, used for overshoot correction.
+	func _measure_y_axis_labels(p_ticks: TickSequence, p_pane_index: int, p_y_axis_id: AxisId) -> Vector2:
+		var max_w := 0.0
+		var max_h := 0.0
+		for value in _collect_labeled_tick_values(p_ticks):
+			var label := _decorate_y_label(p_ticks.format_value(value), p_pane_index, p_y_axis_id)
+			var lsize := _measure_label(label)
+			max_w = max(max_w, lsize.x)
+			max_h = max(max_h, lsize.y)
+
+		# x horizontal: y axis is vertical. Labels sit to the left/right of the axis.
+		#   reserved_depth = label width + gap + tick width (horizontal space).
+		#   half_extent = half of tallest label (vertical overshoot at endpoints).
+		# x vertical: y axis is horizontal. Labels sit above/below the axis.
+		#   reserved_depth = label height + gap + tick height (vertical space).
+		#   half_extent = half of widest label (horizontal overshoot at endpoints).
+		var label_depth: float
+		var tick_depth: float
+		var half_extent: float
+		if _x_is_horizontal:
+			label_depth = max_w
+			tick_depth = float(style.y_major_tick_length_px)
+			half_extent = max_h * 0.5
+		else:
+			label_depth = max_h
+			tick_depth = float(style.y_major_tick_length_px)
+			half_extent = max_w * 0.5
+
+		var reserved := label_depth + float(style.y_tick_y_label_gap_px) + tick_depth if label_depth > 0.0 else 0.0
+		return Vector2(reserved, half_extent)
+
+
+	## Measures x-axis labels and returns Vector2(reserved_depth, half_extent).
+	## reserved_depth: space consumed perpendicular to the x axis direction
+	##   (label extent across the edge + tick gap + tick perpendicular size).
+	## half_extent: overshoot at axis endpoints along the x axis direction
+	##   (half of the widest/tallest endpoint label, depending on orientation).
+	func _measure_x_axis_labels(p_is_primary_x: bool) -> Vector2:
+		var categories: PackedStringArray = domain.x_categories
+		var x_axis_cfg: TauAxisConfig
+		var ticks: TickSequence
+		if p_is_primary_x:
+			x_axis_cfg = domain.config.x_axis
+			ticks = x_ticks
+		else:
+			# The last valid range keeps its space while the range is invalid.
+			x_axis_cfg = domain.config.secondary_x_axis
+			ticks = _last_valid_secondary_x_ticks
+		if x_axis_cfg == null:
+			return Vector2.ZERO
+		var decorate_fn := _decorate_x_label if p_is_primary_x else _decorate_secondary_x_label
+
+		# Collect the maximum label size across both dimensions.
+		var max_label_w := 0.0
+		var max_label_h := 0.0
+		# For continuous axes, track endpoint label sizes for half_extent.
+		var first_size := Vector2.ZERO
+		var last_size := Vector2.ZERO
+
+		match x_axis_cfg.type:
+			TauAxisConfig.Type.CATEGORICAL:
+				for raw_label in categories:
+					var label: String = decorate_fn.call(raw_label)
+					var sz := _measure_label(label)
+					max_label_w = max(max_label_w, sz.x)
+					max_label_h = max(max_label_h, sz.y)
+			TauAxisConfig.Type.CONTINUOUS:
+				if not p_is_primary_x and ticks == null:
+					# No valid secondary x range since plot_xy(). One label
+					# keeps the space.
+					var size_zero := _measure_label(decorate_fn.call("0"))
+					max_label_w = size_zero.x
+					max_label_h = size_zero.y
+				else:
+					var labeled_values := _collect_labeled_tick_values(ticks)
+					for j in range(labeled_values.size()):
+						var label: String = decorate_fn.call(ticks.format_value(labeled_values[j]))
+						var sz := _measure_label(label)
+						max_label_w = max(max_label_w, sz.x)
+						max_label_h = max(max_label_h, sz.y)
+						if j == 0:
+							first_size = sz
+						if j == labeled_values.size() - 1:
+							last_size = sz
+
+		# x horizontal: labels sit below/above the axis line.
+		#   reserved_depth = label height + gap + tick height (vertical space).
+		#   half_extent = half of widest endpoint label (horizontal overshoot).
+		# x vertical: labels sit left/right of the axis line.
+		#   reserved_depth = label width + gap + tick width (horizontal space).
+		#   half_extent = half of tallest endpoint label (vertical overshoot).
+		var label_depth: float
+		var tick_depth: float
+		var endpoint_extent: float
+		if _x_is_horizontal:
+			label_depth = max_label_h
+			tick_depth = float(style.x_major_tick_length_px)
+			endpoint_extent = max(first_size.x, last_size.x) * 0.5
+		else:
+			label_depth = max_label_w
+			tick_depth = float(style.x_major_tick_length_px)
+			endpoint_extent = max(first_size.y, last_size.y) * 0.5
+
+		var reserved := label_depth + float(style.x_tick_x_label_gap_px) + tick_depth if label_depth > 0.0 else 0.0
+		# For categorical axes, endpoint overshoot is zero (labels are centered in slots).
+		var half_extent := endpoint_extent if x_axis_cfg.type == TauAxisConfig.Type.CONTINUOUS else 0.0
+		return Vector2(reserved, half_extent)
