@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://cwokmogupy76"]
+[gd_scene format=3 uid="uid://cte3w0lbgk7v7"]
 
-[ext_resource type="Script" uid="uid://8pwt0828liuo" path="res://scenes/menu.gd" id="1_jmdev"]
+[ext_resource type="Script" path="res://scenes/menu.gd" id="1_jmdev"]
 [ext_resource type="FontFile" uid="uid://cokcitl7rd7kp" path="res://art/DarumadropOne-Regular.ttf" id="1_upctu"]
 [ext_resource type="Shader" uid="uid://beuvpclwtqb7s" path="res://shaders/AnimatedPatternBackground.gdshader" id="2_11y2r"]
 [ext_resource type="Texture2D" uid="uid://cp415upxgcnm0" path="res://art/cat_paw.png" id="2_o0tnf"]
