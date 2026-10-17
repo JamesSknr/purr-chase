@@ -23,7 +23,7 @@ signal round_ended(final_net_worth: float, profit: float)
 ## Ticks simulated before each round, so the graph has history to show.
 @export var warmup_ticks: int = 60
 ## Optional: drag the PriceGraph node onto this in the Inspector.
-@onready var graph: PriceGraph = $TabletTemp/TabletTemp2/PriceGraph
+@onready var graph: PriceGraph = $PriceGraph
 
 const SYMBOL := "CAT"
 
@@ -174,6 +174,7 @@ func buy_share() -> void:
 		print("NOT ENOUGH CASH (need $%.2f, have $%.2f)" % [price, cash])
 	current_action = action.HOLD
 	_update_hud()
+	buy_button.press_button_tween()
 
 
 func sell_share() -> void:
@@ -187,3 +188,4 @@ func sell_share() -> void:
 		print("NO SHARES TO SELL")
 	current_action = action.HOLD
 	_update_hud()
+	sell_button.press_button_tween()
