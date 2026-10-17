@@ -14,6 +14,30 @@ shader_parameter/tiling = 100.0
 shader_parameter/speed = Vector2(0.1, 0.5)
 shader_parameter/rotation = 0.70981485014235
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jmdev"]
+bg_color = Color(1, 0.23529412, 0.25490198, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aaywf"]
+bg_color = Color(0.99998754, 0.3327004, 0.32532907, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
 [node name="Menu" type="Node2D" unique_id=737549228]
 script = ExtResource("1_jmdev")
 
@@ -23,78 +47,78 @@ offset_right = 1183.0
 offset_bottom = 675.0
 color = Color(0.99999994, 0.6751425, 0.39867917, 1)
 
-[node name="ColorRect2" type="ColorRect" parent="." unique_id=540154168]
-offset_left = 248.0
-offset_top = 14.0
-offset_right = 922.0
-offset_bottom = 126.0
-color = Color(0.9999978, 0.2362558, 0.25617895, 1)
-
-[node name="ColorRect3" type="ColorRect" parent="." unique_id=715700846]
-offset_left = 352.0
-offset_top = 180.0
-offset_right = 802.0
-offset_bottom = 292.0
-color = Color(0.9999978, 0.2362558, 0.25617895, 1)
-
-[node name="ColorRect4" type="ColorRect" parent="." unique_id=934870444]
-offset_left = 351.0
-offset_top = 376.0
-offset_right = 801.0
-offset_bottom = 488.0
-color = Color(0.9999978, 0.2362558, 0.25617895, 1)
-
 [node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=983524065]
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_right = 1152.0
+offset_left = 2.0
+offset_right = 1154.0
 offset_bottom = 128.0
 grow_horizontal = 0
 grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
+theme_override_constants/shadow_offset_x = 13
+theme_override_constants/shadow_offset_y = 7
+theme_override_constants/outline_size = 14
 theme_override_fonts/normal_font = ExtResource("1_upctu")
 theme_override_font_sizes/normal_font_size = 80
 text = "Purr-chase Stocks!"
 horizontal_alignment = 1
 
-[node name="RichTextLabel2" type="RichTextLabel" parent="." unique_id=817174851]
-anchors_preset = 6
-anchor_left = 1.0
+[node name="PlayButton" type="Button" parent="." unique_id=1030652792]
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 8.0
-offset_top = 164.0
-offset_right = 1160.0
-offset_bottom = 292.0
-grow_horizontal = 0
+offset_left = 342.0
+offset_top = 199.0
+offset_right = 801.0
+offset_bottom = 316.0
+grow_horizontal = 2
 grow_vertical = 2
-theme_override_fonts/normal_font = ExtResource("1_upctu")
-theme_override_font_sizes/normal_font_size = 80
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 14
+theme_override_fonts/font = ExtResource("1_upctu")
+theme_override_font_sizes/font_size = 80
+theme_override_styles/normal = SubResource("StyleBoxFlat_jmdev")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jmdev")
+theme_override_styles/hover = SubResource("StyleBoxFlat_aaywf")
 text = "Play"
-horizontal_alignment = 1
 
-[node name="RichTextLabel3" type="RichTextLabel" parent="." unique_id=1012704578]
-anchors_preset = 6
-anchor_left = 1.0
+[node name="QuitButton" type="Button" parent="." unique_id=1491924268]
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -4.0
-offset_top = 365.0
-offset_right = 1148.0
-offset_bottom = 493.0
-grow_horizontal = 0
+offset_left = 341.0
+offset_top = 396.0
+offset_right = 800.0
+offset_bottom = 513.0
+grow_horizontal = 2
 grow_vertical = 2
-theme_override_fonts/normal_font = ExtResource("1_upctu")
-theme_override_font_sizes/normal_font_size = 80
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 14
+theme_override_fonts/font = ExtResource("1_upctu")
+theme_override_font_sizes/font_size = 80
+theme_override_styles/normal = SubResource("StyleBoxFlat_jmdev")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jmdev")
+theme_override_styles/hover = SubResource("StyleBoxFlat_aaywf")
 text = "Quit"
-horizontal_alignment = 1
 
 [node name="CatPawSprite" type="Sprite2D" parent="." unique_id=1776804496]
-position = Vector2(624.00006, 583)
+position = Vector2(917.00006, 506.99994)
 scale = Vector2(0.16038592, 0.16038594)
 texture = ExtResource("5_jmdev")
-offset = Vector2(0, 3600)
+offset = Vector2(0, 3100)
+
+[connection signal="pressed" from="PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="QuitButton" to="." method="_on_quit_button_pressed"]
