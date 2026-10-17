@@ -4,7 +4,7 @@
 [ext_resource type="FontFile" uid="uid://cokcitl7rd7kp" path="res://art/DarumadropOne-Regular.ttf" id="1_upctu"]
 [ext_resource type="Shader" uid="uid://beuvpclwtqb7s" path="res://shaders/AnimatedPatternBackground.gdshader" id="2_11y2r"]
 [ext_resource type="Texture2D" uid="uid://cp415upxgcnm0" path="res://art/cat_paw.png" id="2_o0tnf"]
-[ext_resource type="Texture2D" uid="uid://dmcgq4hlsvcd" path="res://art/Cat Paw.png" id="5_jmdev"]
+[ext_resource type="PackedScene" uid="uid://4yt8pa0vwxtw" path="res://scenes/cat_paw.tscn" id="6_aaywf"]
 [ext_resource type="AudioStream" uid="uid://v62hjpmaem51" path="res://SFX/Button Click.mp3" id="6_b6cxs"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o0tnf"]
@@ -75,10 +75,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 342.0
-offset_top = 199.0
-offset_right = 801.0
-offset_bottom = 316.0
+offset_left = 14.0
+offset_top = 340.0
+offset_right = 473.0
+offset_bottom = 465.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
@@ -98,10 +98,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 341.0
-offset_top = 396.0
-offset_right = 800.0
-offset_bottom = 513.0
+offset_left = 730.0
+offset_top = 345.0
+offset_right = 1189.0
+offset_bottom = 470.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
@@ -115,15 +115,15 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_jmdev")
 theme_override_styles/hover = SubResource("StyleBoxFlat_aaywf")
 text = "Quit"
 
-[node name="CatPawSprite" type="Sprite2D" parent="." unique_id=1776804496]
-position = Vector2(917.00006, 506.99994)
-scale = Vector2(0.16038592, 0.16038594)
-texture = ExtResource("5_jmdev")
-offset = Vector2(0, 3100)
-
 [node name="ButtonClick" type="AudioStreamPlayer" parent="." unique_id=1239364419]
 stream = ExtResource("6_b6cxs")
 volume_db = 8.667
+
+[node name="CatPaw" parent="." unique_id=1855701812 instance=ExtResource("6_aaywf")]
+offset_left = 636.0
+offset_top = 346.0
+offset_right = 643.52795
+offset_bottom = 357.016
 
 [connection signal="pressed" from="PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="QuitButton" to="." method="_on_quit_button_pressed"]

@@ -5,10 +5,12 @@
 [ext_resource type="Shader" uid="uid://beuvpclwtqb7s" path="res://shaders/AnimatedPatternBackground.gdshader" id="2_3qnke"]
 [ext_resource type="Texture2D" uid="uid://ckcdlvgej7asn" path="res://art/Living Room Background.png" id="2_rnaij"]
 [ext_resource type="PackedScene" uid="uid://bgmm8il27e1p" path="res://scenes/buy_button.tscn" id="3_nd71p"]
+[ext_resource type="Texture2D" uid="uid://c8i2xbxqneg22" path="res://art/monitor.png" id="3_s36qc"]
 [ext_resource type="Texture2D" uid="uid://cp415upxgcnm0" path="res://art/cat_paw.png" id="3_wtsjf"]
 [ext_resource type="PackedScene" uid="uid://bwfuk4yj0u48s" path="res://scenes/sell_button.tscn" id="4_7ddre"]
 [ext_resource type="Script" uid="uid://wyp7h10gg56s" path="res://scripts/price_graph.gd" id="4_wtsjf"]
 [ext_resource type="PackedScene" uid="uid://bqcqwkkeod8sk" path="res://scenes/clock.tscn" id="9_h3xc6"]
+[ext_resource type="FontFile" uid="uid://cokcitl7rd7kp" path="res://art/DarumadropOne-Regular.ttf" id="10_6qxox"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rnaij"]
 shader = ExtResource("2_3qnke")
@@ -22,58 +24,30 @@ shader_parameter/rotation = 0.70981485014235
 script = ExtResource("1_j8ivh")
 
 [node name="LivingRoomBackground" type="Sprite2D" parent="." unique_id=2069714296]
-position = Vector2(597, 354)
-scale = Vector2(0.28780204, 0.287802)
+position = Vector2(576, 324)
+scale = Vector2(0.26568267, 0.2525331)
 texture = ExtResource("2_rnaij")
 
-[node name="TabletShadow" type="ColorRect" parent="." unique_id=751932422]
-offset_left = 26.0
-offset_top = 447.00003
-offset_right = 770.0
-offset_bottom = 732.00073
-scale = Vector2(1, 0.19999939)
-color = Color(0, 0, 0, 0.19215687)
+[node name="Monitor" type="Sprite2D" parent="." unique_id=530804391]
+position = Vector2(438, 312)
+texture = ExtResource("3_s36qc")
 
-[node name="TabletBackground" type="ColorRect" parent="." unique_id=1735224390]
-offset_left = 26.0
-offset_top = 14.0
-offset_right = 770.0
-offset_bottom = 456.0
-color = Color(0.27509058, 0.27509058, 0.27509055, 1)
-
-[node name="GraphBackground" type="ColorRect" parent="TabletBackground" unique_id=112982288]
+[node name="GraphBackground" type="ColorRect" parent="." unique_id=112982288]
 material = SubResource("ShaderMaterial_rnaij")
-layout_mode = 0
-offset_left = 14.0
-offset_top = 12.0
-offset_right = 729.05774
-offset_bottom = 420.0
+offset_left = 108.0
+offset_top = 31.0
+offset_right = 757.0
+offset_bottom = 448.0
 color = Color(2.6095218e-05, 2.6095217e-05, 2.6095213e-05, 1)
 
 [node name="PriceGraph" type="Control" parent="." unique_id=1621626241]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 40.0
-offset_top = 26.0
-offset_right = 755.0
-offset_bottom = 434.0
+offset_left = 108.0
+offset_top = 31.0
+offset_right = 757.0
+offset_bottom = 448.0
 script = ExtResource("4_wtsjf")
-
-[node name="ClockTemp" type="ColorRect" parent="." unique_id=1459985845]
-offset_left = 863.0
-offset_top = 428.0
-offset_right = 1121.0
-offset_bottom = 622.0
-color = Color(0.19554523, 0.19554508, 0.19554508, 1)
-
-[node name="Label" type="Label" parent="ClockTemp" unique_id=751303695]
-layout_mode = 0
-offset_left = 45.0
-offset_top = 42.0
-offset_right = 223.0
-offset_bottom = 144.0
-theme_override_font_sizes/font_size = 55
-text = "CLOCK"
 
 [node name="BuyButton" parent="." unique_id=1816091244 instance=ExtResource("3_nd71p")]
 position = Vector2(138, 482)
@@ -92,24 +66,33 @@ offset_right = 428.0
 offset_bottom = 562.0
 grow_horizontal = 0
 
-[node name="PriceLabel" type="Label" parent="." unique_id=1107326649]
-offset_left = 220.0
-offset_top = 40.0
-offset_right = 601.0
-offset_bottom = 212.0
+[node name="SharesLabel" type="Label" parent="." unique_id=1111676906]
+offset_left = 307.0
+offset_top = 25.0
+offset_right = 598.0
+offset_bottom = 159.0
+theme_override_fonts/font = ExtResource("10_6qxox")
+theme_override_font_sizes/font_size = 32
+text = "Shares:0"
 
 [node name="CashLabel" type="Label" parent="." unique_id=781126470]
-offset_left = 72.0
-offset_top = 232.0
-offset_right = 453.0
-offset_bottom = 404.0
+offset_left = 307.0
+offset_top = 55.0
+offset_right = 688.0
+offset_bottom = 227.0
+theme_override_fonts/font = ExtResource("10_6qxox")
+theme_override_font_sizes/font_size = 32
+text = "Cash $"
 
-[node name="SharesLabel" type="Label" parent="." unique_id=1111676906]
-offset_left = 534.0
-offset_top = 283.0
-offset_right = 825.0
-offset_bottom = 417.0
+[node name="PriceLabel" type="Label" parent="." unique_id=1107326649]
+offset_left = 307.0
+offset_top = 88.0
+offset_right = 688.0
+offset_bottom = 260.0
+theme_override_fonts/font = ExtResource("10_6qxox")
+theme_override_font_sizes/font_size = 32
+text = "CAT $99.99 (+1.0%)"
 
 [node name="clock" parent="." unique_id=1996270700 instance=ExtResource("9_h3xc6")]
-position = Vector2(1035, 458)
+position = Vector2(1002.99994, 445)
 scale = Vector2(0.7478293, 0.7478293)
