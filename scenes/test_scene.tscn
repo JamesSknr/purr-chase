@@ -1,3 +1,67 @@
 [gd_scene format=3 uid="uid://s3rwrt58wisn"]
 
+[ext_resource type="PackedScene" uid="uid://0ychlkpant3a" path="res://scenes/cat_paw.tscn" id="1_g7g4h"]
+[ext_resource type="Script" uid="uid://cig4a81omwktx" path="res://scripts/level_logic.gd" id="1_j8ivh"]
+[ext_resource type="PackedScene" uid="uid://cgk1xle11oqm3" path="res://scenes/Button.tscn" id="3_nd71p"]
+
 [node name="testScene" type="Node2D" unique_id=2012543513]
+script = ExtResource("1_j8ivh")
+
+[node name="TableTemp" type="ColorRect" parent="." unique_id=291758808]
+offset_left = -21.0
+offset_top = -11.0
+offset_right = 1178.0
+offset_bottom = 686.0
+color = Color(0.990763, 0.61327225, 0.36772475, 1)
+
+[node name="BuyButton" parent="." unique_id=295758268 instance=ExtResource("3_nd71p")]
+position = Vector2(103, 488)
+button_name = "Buy"
+button_color = Color(0, 1, 0, 1)
+
+[node name="SellButton" parent="." unique_id=1605237462 instance=ExtResource("3_nd71p")]
+position = Vector2(553, 491)
+button_name = "Sell"
+button_color = Color(1, 0, 0, 1)
+
+[node name="TabletTemp" type="ColorRect" parent="." unique_id=1735224390]
+offset_left = 26.0
+offset_top = 14.0
+offset_right = 835.0
+offset_bottom = 456.0
+color = Color(0.27509058, 0.27509058, 0.27509055, 1)
+
+[node name="TabletTemp2" type="ColorRect" parent="TabletTemp" unique_id=1637545397]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 12.0
+offset_right = 784.0
+offset_bottom = 422.0
+color = Color(0.14767197, 0.14767176, 0.14767179, 1)
+
+[node name="ClockTemp" type="ColorRect" parent="." unique_id=1459985845]
+offset_left = 863.0
+offset_top = 428.0
+offset_right = 1121.0
+offset_bottom = 622.0
+color = Color(0.19554523, 0.19554508, 0.19554508, 1)
+
+[node name="Label" type="Label" parent="ClockTemp" unique_id=751303695]
+layout_mode = 0
+offset_left = 44.0
+offset_top = 42.0
+offset_right = 222.0
+offset_bottom = 144.0
+theme_override_font_sizes/font_size = 55
+text = "CLOCK"
+
+[node name="CatPaw" parent="." unique_id=1855701812 instance=ExtResource("1_g7g4h")]
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 321.0
+offset_top = 531.0
+offset_right = 321.0
+offset_bottom = 531.0
+grow_horizontal = 0
