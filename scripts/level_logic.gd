@@ -23,7 +23,7 @@ signal round_ended(final_net_worth: float, profit: float)
 ## Ticks simulated before each round, so the graph has history to show.
 @export var warmup_ticks: int = 60
 ## Optional: drag the PriceGraph node onto this in the Inspector.
-@export var graph: PriceGraph
+@onready var graph: PriceGraph = $TabletTemp/TabletTemp2/PriceGraph
 
 const SYMBOL := "CAT"
 
