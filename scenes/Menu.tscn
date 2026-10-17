@@ -1,10 +1,10 @@
-[gd_scene format=3 uid="uid://cte3w0lbgk7v7"]
+[gd_scene format=3 uid="uid://cwokmogupy76"]
 
-[ext_resource type="Script" path="res://scenes/menu.gd" id="1_jmdev"]
+[ext_resource type="Script" uid="uid://8pwt0828liuo" path="res://scenes/menu.gd" id="1_jmdev"]
 [ext_resource type="FontFile" uid="uid://cokcitl7rd7kp" path="res://art/DarumadropOne-Regular.ttf" id="1_upctu"]
 [ext_resource type="Shader" uid="uid://beuvpclwtqb7s" path="res://shaders/AnimatedPatternBackground.gdshader" id="2_11y2r"]
 [ext_resource type="Texture2D" uid="uid://cp415upxgcnm0" path="res://art/cat_paw.png" id="2_o0tnf"]
-[ext_resource type="Texture2D" uid="uid://bh1ba6y1ltl6o" path="res://art/cat_hand_placeholder.webp" id="4_o0tnf"]
+[ext_resource type="Texture2D" uid="uid://dmcgq4hlsvcd" path="res://art/Cat Paw.png" id="5_jmdev"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o0tnf"]
 shader = ExtResource("2_11y2r")
@@ -93,7 +93,8 @@ theme_override_font_sizes/normal_font_size = 80
 text = "Quit"
 horizontal_alignment = 1
 
-[node name="CatHandPlaceholder" type="Sprite2D" parent="." unique_id=179894832]
-position = Vector2(587.625, 704)
-scale = Vector2(0.25507605, 0.5135364)
-texture = ExtResource("4_o0tnf")
+[node name="CatPawSprite" type="Sprite2D" parent="." unique_id=1776804496]
+position = Vector2(624.00006, 583)
+scale = Vector2(0.16038592, 0.16038594)
+texture = ExtResource("5_jmdev")
+offset = Vector2(0, 3600)
