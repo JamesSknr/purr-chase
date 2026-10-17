@@ -35,8 +35,10 @@ func _unhandled_input(event):
 func buy_share() -> void:
 	print("YOU BOUGHT A SHARE")
 	current_action = action.HOLD
+	buy_button.press_button_tween()
 	
 	
 func sell_share() -> void:
 	print("YOU SOLD A SHARE")
 	current_action = action.HOLD
+	sell_button.press_button_tween()

@@ -2,17 +2,27 @@
 
 [ext_resource type="PackedScene" uid="uid://0ychlkpant3a" path="res://scenes/cat_paw.tscn" id="1_g7g4h"]
 [ext_resource type="Script" uid="uid://cig4a81omwktx" path="res://scripts/level_logic.gd" id="1_j8ivh"]
+[ext_resource type="Shader" uid="uid://beuvpclwtqb7s" path="res://shaders/AnimatedPatternBackground.gdshader" id="2_3qnke"]
 [ext_resource type="PackedScene" uid="uid://c08k3vd16rcer" path="res://scenes/buy_button.tscn" id="3_nd71p"]
+[ext_resource type="Texture2D" uid="uid://cp415upxgcnm0" path="res://art/cat_paw.png" id="3_wtsjf"]
 [ext_resource type="PackedScene" uid="uid://bdh6bjo0ow4il" path="res://scenes/sell_button.tscn" id="4_7ddre"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rnaij"]
+shader = ExtResource("2_3qnke")
+shader_parameter/pattern = ExtResource("3_wtsjf")
+shader_parameter/pattern_color = Color(1, 0.39285982, 0.37438384, 1)
+shader_parameter/tiling = 100.0
+shader_parameter/speed = Vector2(0.1, 0.5)
+shader_parameter/rotation = 0.70981485014235
 
 [node name="testScene" type="Node2D" unique_id=2012543513]
 script = ExtResource("1_j8ivh")
 
-[node name="TableTemp" type="ColorRect" parent="." unique_id=291758808]
-offset_top = -1.0
-offset_right = 1150.0
-offset_bottom = 643.0
-color = Color(0.990763, 0.61327225, 0.36772475, 1)
+[node name="ColorRect" type="ColorRect" parent="." unique_id=112982288]
+material = SubResource("ShaderMaterial_rnaij")
+offset_right = 1183.0
+offset_bottom = 675.0
+color = Color(0.99999994, 0.6751425, 0.39867917, 1)
 
 [node name="TabletTemp" type="ColorRect" parent="." unique_id=1735224390]
 offset_left = 26.0
