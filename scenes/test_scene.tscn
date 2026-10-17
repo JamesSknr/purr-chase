@@ -17,8 +17,6 @@ shader_parameter/rotation = 0.70981485014235
 
 [node name="testScene" type="Node2D" unique_id=2012543513]
 script = ExtResource("1_j8ivh")
-seconds_per_tick = null
-starting_cash = null
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=112982288]
 material = SubResource("ShaderMaterial_rnaij")

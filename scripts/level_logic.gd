@@ -3,8 +3,8 @@ enum action {BUY, SELL, HOLD}
 var current_action = action.HOLD
 
 @onready var cat_paw: Cat = $CatPaw
-@onready var buy_button: BigButton = $BuyButton
-@onready var sell_button: BigButton = $SellButton
+@onready var buy_button = $BuyButton
+@onready var sell_button = $SellButton
 
 
 # ---------------------------------------------------------------------
@@ -18,7 +18,7 @@ signal round_started
 signal round_ended(final_net_worth: float, profit: float)
 
 @export var round_length: float = 60.0      # seconds per round
-@export var seconds_per_tick: float = 1.0   # one market tick per second
+@export var seconds_per_tick: float = 0.5   # two market tick per second
 @export var starting_cash: float = 1000.0
 ## Ticks simulated before each round, so the graph has history to show.
 @export var warmup_ticks: int = 60
@@ -173,15 +173,9 @@ func buy_share() -> void:
 	else:
 		print("NOT ENOUGH CASH (need $%.2f, have $%.2f)" % [price, cash])
 	current_action = action.HOLD
-<<<<<<< HEAD
 	_update_hud()
 
 
-=======
-	buy_button.press_button_tween()
-	
-	
->>>>>>> main
 func sell_share() -> void:
 	var price := current_price()
 	if shares > 0:
@@ -192,8 +186,4 @@ func sell_share() -> void:
 	else:
 		print("NO SHARES TO SELL")
 	current_action = action.HOLD
-<<<<<<< HEAD
 	_update_hud()
-=======
-	sell_button.press_button_tween()
->>>>>>> main
