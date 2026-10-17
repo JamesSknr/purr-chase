@@ -65,3 +65,21 @@ offset_top = 531.0
 offset_right = 321.0
 offset_bottom = 531.0
 grow_horizontal = 0
+
+[node name="PriceLabel" type="Label" parent="." unique_id=1107326649]
+offset_left = 220.0
+offset_top = 40.0
+offset_right = 601.0
+offset_bottom = 212.0
+
+[node name="CashLabel" type="Label" parent="." unique_id=781126470]
+offset_left = 72.0
+offset_top = 232.0
+offset_right = 453.0
+offset_bottom = 404.0
+
+[node name="SharesLabel" type="Label" parent="." unique_id=1111676906]
+offset_left = 473.0
+offset_top = 241.0
+offset_right = 764.0
+offset_bottom = 375.0

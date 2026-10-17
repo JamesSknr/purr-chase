@@ -67,13 +67,6 @@ func _on_news(_tick: int, _symbol: String, headline: String) -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	print("[debug] LEVEL LOGIC READY - script is attached and running")
-	if cat_paw == null:
-		push_error("[debug] $CatPaw not found - check the node's name in the Scene dock")
-	if buy_button == null:
-		push_error("[debug] $BuyButton not found - check the node's name in the Scene dock")
-	if sell_button == null:
-		push_error("[debug] $SellButton not found - check the node's name in the Scene dock")
 
 	cash = starting_cash
 	#                           symbol  price  volatility  beta
@@ -87,7 +80,6 @@ func _ready() -> void:
 func _input(event):
 	if event is InputEventKey and event.pressed and not event.echo:
 		print("[debug] key reached _input: ", event.as_text_keycode())
-
 
 func _unhandled_input(event):
 	if event is InputEventKey and event.pressed and not event.echo:
