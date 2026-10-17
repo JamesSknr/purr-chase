@@ -1,366 +1,366 @@
 {
   "_comment": "Purr-chase event pools. One stock per level. Rules: shortage/less supply = price up, glut/more supply = down, demand up = up, demand/trust down = down. Headlines describe the CAUSE, never the price outcome. shape: spike | crash | drift | pop_fade. impact = percent of base price, signed. delay = seconds after headline before the move starts. duration = seconds the move plays out. weight = draw likelihood (0 = chain-only, never drawn randomly).",
   "levels": {
-    "1": {
-      "name": "Milk",
-      "stock": "MILK",
-      "start_price": 100,
-      "volatility": 0.01,
-      "event_interval": [
-        7,
-        11
-      ],
-      "events": [
-        {
-          "id": "milk_morning_rush",
-          "headline": "Morning rush: everyone wants a saucer",
-          "shape": "spike",
-          "impact": 8,
-          "delay": 2.0,
-          "duration": 5,
-          "weight": 10
-        },
-        {
-          "id": "milk_cold_snap",
-          "headline": "Cold snap sets in, cats crave warm milk",
-          "shape": "drift",
-          "impact": 6,
-          "delay": 2.5,
-          "duration": 6,
-          "weight": 8
-        },
-        {
-          "id": "milk_glut",
-          "headline": "Cows well rested, milk floods the market",
-          "shape": "drift",
-          "impact": -7,
-          "delay": 2.5,
-          "duration": 6,
-          "weight": 8
-        },
-        {
-          "id": "milk_subsidy",
-          "headline": "Dairy subsidies boost production",
-          "shape": "drift",
-          "impact": -5,
-          "delay": 3.0,
-          "duration": 7,
-          "weight": 6
-        },
-        {
-          "id": "milk_tanker",
-          "headline": "Milk tanker overturns on the motorway",
-          "shape": "spike",
-          "impact": 9,
-          "delay": 2.0,
-          "duration": 5,
-          "weight": 6
-        },
-        {
-          "id": "milk_oat_trend",
-          "headline": "Cats chase the new oat-milk trend",
-          "shape": "drift",
-          "impact": -6,
-          "delay": 2.5,
-          "duration": 6,
-          "weight": 7
-        },
-        {
-          "id": "milk_lactose_scare",
-          "headline": "Lactose scare grips the nation",
-          "shape": "pop_fade",
-          "impact": -7,
-          "delay": 1.5,
-          "duration": 6,
-          "weight": 4
-        }
-      ]
-    },
-    "2": {
-      "name": "Tuna",
-      "stock": "TUNA",
-      "start_price": 100,
-      "volatility": 0.014,
-      "event_interval": [
-        6,
-        9
-      ],
-      "events": [
-        {
-          "id": "tuna_boat_explosion",
-          "headline": "Fishing boat explodes, fleet grounded for days",
-          "shape": "spike",
-          "impact": 16,
-          "delay": 2.0,
-          "duration": 6,
-          "weight": 8
-        },
-        {
-          "id": "tuna_record_catch",
-          "headline": "Record catch floods the market",
-          "shape": "drift",
-          "impact": -12,
-          "delay": 2.5,
-          "duration": 6,
-          "weight": 8
-        },
-        {
-          "id": "tuna_storms",
-          "headline": "Storms ground the fishing fleet",
-          "shape": "drift",
-          "impact": 13,
-          "delay": 2.5,
-          "duration": 7,
-          "weight": 7
-        },
-        {
-          "id": "tuna_kibble_hit",
-          "headline": "New tuna-flavour kibble is a nationwide hit",
-          "shape": "spike",
-          "impact": 11,
-          "delay": 2.0,
-          "duration": 5,
-          "weight": 8
-        },
-        {
-          "id": "tuna_watered_down",
-          "headline": "Supplier caught watering down the tuna",
-          "shape": "crash",
-          "impact": -15,
-          "delay": 1.5,
-          "duration": 5,
-          "weight": 6
-        },
-        {
-          "id": "tuna_brain_food",
-          "headline": "Health board declares fish is brain food for cats",
-          "shape": "drift",
-          "impact": 9,
-          "delay": 3.0,
-          "duration": 7,
-          "weight": 6
-        },
-        {
-          "id": "tuna_chicken_craze",
-          "headline": "Cats switch to the new chicken craze",
-          "shape": "drift",
-          "impact": -10,
-          "delay": 2.5,
-          "duration": 6,
-          "weight": 6
-        }
-      ]
-    },
-    "3": {
-      "name": "Yarn",
-      "stock": "YARN",
-      "start_price": 100,
-      "volatility": 0.018,
-      "event_interval": [
-        5,
-        8
-      ],
-      "events": [
-        {
-          "id": "yarn_mill_output",
-          "headline": "Yarn mill doubles output",
-          "shape": "drift",
-          "impact": -14,
-          "delay": 2.5,
-          "duration": 6,
-          "weight": 8
-        },
-        {
-          "id": "yarn_hairball",
-          "headline": "Hairball crisis shuts three factories",
-          "shape": "spike",
-          "impact": 16,
-          "delay": 2.0,
-          "duration": 6,
-          "weight": 7
-        },
-        {
-          "id": "yarn_kitten_boom",
-          "headline": "Kitten boom sweeps the nation",
-          "shape": "drift",
-          "impact": 15,
-          "delay": 2.5,
-          "duration": 7,
-          "weight": 7
-        },
-        {
-          "id": "yarn_ceo_scandal",
-          "headline": "YarnCo CEO caught in a tangled web of scandal",
-          "shape": "spike",
-          "impact": 18,
-          "delay": 2.0,
-          "duration": 6,
-          "weight": 5
-        },
-        {
-          "id": "yarn_bored",
-          "headline": "Nation briefly bored of string",
-          "shape": "drift",
-          "impact": -12,
-          "delay": 2.5,
-          "duration": 6,
-          "weight": 6
-        },
-        {
-          "id": "yarn_tangle_recall",
-          "headline": "Giant tangle forces a nationwide product recall",
-          "shape": "crash",
-          "impact": -16,
-          "delay": 2.0,
-          "duration": 5,
-          "weight": 5
-        }
-      ]
-    },
-    "4": {
-      "name": "Nip",
-      "stock": "NIP",
-      "start_price": 100,
-      "volatility": 0.028,
-      "event_interval": [
-        4,
-        7
-      ],
-      "events": [
-        {
-          "id": "nip_festival",
-          "headline": "Catnip festival breaks attendance records",
-          "shape": "spike",
-          "impact": 22,
-          "delay": 2.0,
-          "duration": 5,
-          "weight": 8
-        },
-        {
-          "id": "nip_heatwave",
-          "headline": "Heatwave melts the catnip stockpile",
-          "shape": "spike",
-          "impact": 25,
-          "delay": 2.0,
-          "duration": 6,
-          "weight": 7
-        },
-        {
-          "id": "nip_warning",
-          "headline": "Regulators warn nip is 'dangerously fun'",
-          "shape": "spike",
-          "impact": 20,
-          "delay": 2.0,
-          "duration": 5,
-          "weight": 5
-        },
-        {
-          "id": "nip_zoomies",
-          "headline": "Zoomies epidemic linked to nip",
-          "shape": "crash",
-          "impact": -24,
-          "delay": 1.5,
-          "duration": 5,
-          "weight": 6
-        },
-        {
-          "id": "nip_bumper_harvest",
-          "headline": "Bumper catnip harvest across the valleys",
-          "shape": "drift",
-          "impact": -20,
-          "delay": 2.5,
-          "duration": 6,
-          "weight": 6
-        },
-        {
-          "id": "nip_shortage",
-          "headline": "GREAT CATNIP SHORTAGE grips the nation",
-          "shape": "spike",
-          "impact": 28,
-          "delay": 2.5,
-          "duration": 6,
-          "weight": 4,
-          "chain": {
-            "event": "nip_correction",
-            "delay": 4.0
-          }
-        },
-        {
-          "id": "nip_correction",
-          "headline": "Cats give up and just nap it off",
-          "shape": "drift",
-          "impact": -18,
-          "delay": 1.0,
-          "duration": 5,
-          "weight": 0
-        }
-      ]
-    },
-    "5": {
-      "name": "Laser",
-      "stock": "LASER",
-      "start_price": 100,
-      "volatility": 0.04,
-      "event_interval": [
-        4,
-        6
-      ],
-      "events": [
-        {
-          "id": "laser_dot3000",
-          "headline": "LaserCorp unveils the DOT 3000, analysts lose their minds",
-          "shape": "pop_fade",
-          "impact": 40,
-          "delay": 2.0,
-          "duration": 7,
-          "weight": 7
-        },
-        {
-          "id": "laser_toy_of_year",
-          "headline": "Red dot named Toy of the Year",
-          "shape": "spike",
-          "impact": 22,
-          "delay": 2.0,
-          "duration": 5,
-          "weight": 7
-        },
-        {
-          "id": "laser_recall",
-          "headline": "Recall after a cat chases the dot off a table",
-          "shape": "crash",
-          "impact": -30,
-          "delay": 1.5,
-          "duration": 5,
-          "weight": 6
-        },
-        {
-          "id": "laser_rival",
-          "headline": "Rival launches the DOT 3000 Pro",
-          "shape": "pop_fade",
-          "impact": -22,
-          "delay": 2.0,
-          "duration": 6,
-          "weight": 5
-        },
-        {
-          "id": "laser_factory_fire",
-          "headline": "Laser factory goes up in (literal) smoke",
-          "shape": "spike",
-          "impact": 28,
-          "delay": 2.0,
-          "duration": 6,
-          "weight": 5
-        },
-        {
-          "id": "laser_bubble_burst",
-          "headline": "Investors realise it is, in fact, just a red dot",
-          "shape": "crash",
-          "impact": -35,
-          "delay": 2.0,
-          "duration": 6,
-          "weight": 4
-        }
-      ]
-    }
+	"1": {
+	  "name": "Milk",
+	  "stock": "MILK",
+	  "start_price": 100,
+	  "volatility": 0.01,
+	  "event_interval": [
+		7,
+		11
+	  ],
+	  "events": [
+		{
+		  "id": "milk_morning_rush",
+		  "headline": "Morning rush: everyone wants a saucer",
+		  "shape": "spike",
+		  "impact": 8,
+		  "delay": 2.0,
+		  "duration": 5,
+		  "weight": 10
+		},
+		{
+		  "id": "milk_cold_snap",
+		  "headline": "Cold snap sets in, cats crave warm milk",
+		  "shape": "drift",
+		  "impact": 6,
+		  "delay": 2.5,
+		  "duration": 6,
+		  "weight": 8
+		},
+		{
+		  "id": "milk_glut",
+		  "headline": "Cows well rested, milk floods the market",
+		  "shape": "drift",
+		  "impact": -7,
+		  "delay": 2.5,
+		  "duration": 6,
+		  "weight": 8
+		},
+		{
+		  "id": "milk_subsidy",
+		  "headline": "Dairy subsidies boost production",
+		  "shape": "drift",
+		  "impact": -5,
+		  "delay": 3.0,
+		  "duration": 7,
+		  "weight": 6
+		},
+		{
+		  "id": "milk_tanker",
+		  "headline": "Milk tanker overturns on the motorway",
+		  "shape": "spike",
+		  "impact": 9,
+		  "delay": 2.0,
+		  "duration": 5,
+		  "weight": 6
+		},
+		{
+		  "id": "milk_oat_trend",
+		  "headline": "Cats chase the new oat-milk trend",
+		  "shape": "drift",
+		  "impact": -6,
+		  "delay": 2.5,
+		  "duration": 6,
+		  "weight": 7
+		},
+		{
+		  "id": "milk_lactose_scare",
+		  "headline": "Lactose scare grips the nation",
+		  "shape": "pop_fade",
+		  "impact": -7,
+		  "delay": 1.5,
+		  "duration": 6,
+		  "weight": 4
+		}
+	  ]
+	},
+	"2": {
+	  "name": "Tuna",
+	  "stock": "TUNA",
+	  "start_price": 100,
+	  "volatility": 0.014,
+	  "event_interval": [
+		6,
+		9
+	  ],
+	  "events": [
+		{
+		  "id": "tuna_boat_explosion",
+		  "headline": "Fishing boat explodes, fleet grounded for days",
+		  "shape": "spike",
+		  "impact": 16,
+		  "delay": 2.0,
+		  "duration": 6,
+		  "weight": 8
+		},
+		{
+		  "id": "tuna_record_catch",
+		  "headline": "Record catch floods the market",
+		  "shape": "drift",
+		  "impact": -12,
+		  "delay": 2.5,
+		  "duration": 6,
+		  "weight": 8
+		},
+		{
+		  "id": "tuna_storms",
+		  "headline": "Storms ground the fishing fleet",
+		  "shape": "drift",
+		  "impact": 13,
+		  "delay": 2.5,
+		  "duration": 7,
+		  "weight": 7
+		},
+		{
+		  "id": "tuna_kibble_hit",
+		  "headline": "New tuna-flavour kibble is a nationwide hit",
+		  "shape": "spike",
+		  "impact": 11,
+		  "delay": 2.0,
+		  "duration": 5,
+		  "weight": 8
+		},
+		{
+		  "id": "tuna_watered_down",
+		  "headline": "Supplier caught watering down the tuna",
+		  "shape": "crash",
+		  "impact": -15,
+		  "delay": 1.5,
+		  "duration": 5,
+		  "weight": 6
+		},
+		{
+		  "id": "tuna_brain_food",
+		  "headline": "Health board declares fish is brain food for cats",
+		  "shape": "drift",
+		  "impact": 9,
+		  "delay": 3.0,
+		  "duration": 7,
+		  "weight": 6
+		},
+		{
+		  "id": "tuna_chicken_craze",
+		  "headline": "Cats switch to the new chicken craze",
+		  "shape": "drift",
+		  "impact": -10,
+		  "delay": 2.5,
+		  "duration": 6,
+		  "weight": 6
+		}
+	  ]
+	},
+	"3": {
+	  "name": "Yarn",
+	  "stock": "YARN",
+	  "start_price": 100,
+	  "volatility": 0.018,
+	  "event_interval": [
+		5,
+		8
+	  ],
+	  "events": [
+		{
+		  "id": "yarn_mill_output",
+		  "headline": "Yarn mill doubles output",
+		  "shape": "drift",
+		  "impact": -14,
+		  "delay": 2.5,
+		  "duration": 6,
+		  "weight": 8
+		},
+		{
+		  "id": "yarn_hairball",
+		  "headline": "Hairball crisis shuts three factories",
+		  "shape": "spike",
+		  "impact": 16,
+		  "delay": 2.0,
+		  "duration": 6,
+		  "weight": 7
+		},
+		{
+		  "id": "yarn_kitten_boom",
+		  "headline": "Kitten boom sweeps the nation",
+		  "shape": "drift",
+		  "impact": 15,
+		  "delay": 2.5,
+		  "duration": 7,
+		  "weight": 7
+		},
+		{
+		  "id": "yarn_ceo_scandal",
+		  "headline": "YarnCo CEO caught in a tangled web of scandal",
+		  "shape": "spike",
+		  "impact": 18,
+		  "delay": 2.0,
+		  "duration": 6,
+		  "weight": 5
+		},
+		{
+		  "id": "yarn_bored",
+		  "headline": "Nation briefly bored of string",
+		  "shape": "drift",
+		  "impact": -12,
+		  "delay": 2.5,
+		  "duration": 6,
+		  "weight": 6
+		},
+		{
+		  "id": "yarn_tangle_recall",
+		  "headline": "Giant tangle forces a nationwide product recall",
+		  "shape": "crash",
+		  "impact": -16,
+		  "delay": 2.0,
+		  "duration": 5,
+		  "weight": 5
+		}
+	  ]
+	},
+	"4": {
+	  "name": "Nip",
+	  "stock": "NIP",
+	  "start_price": 100,
+	  "volatility": 0.028,
+	  "event_interval": [
+		4,
+		7
+	  ],
+	  "events": [
+		{
+		  "id": "nip_festival",
+		  "headline": "Catnip festival breaks attendance records",
+		  "shape": "spike",
+		  "impact": 22,
+		  "delay": 2.0,
+		  "duration": 5,
+		  "weight": 8
+		},
+		{
+		  "id": "nip_heatwave",
+		  "headline": "Heatwave melts the catnip stockpile",
+		  "shape": "spike",
+		  "impact": 25,
+		  "delay": 2.0,
+		  "duration": 6,
+		  "weight": 7
+		},
+		{
+		  "id": "nip_warning",
+		  "headline": "Regulators warn nip is 'dangerously fun'",
+		  "shape": "spike",
+		  "impact": 20,
+		  "delay": 2.0,
+		  "duration": 5,
+		  "weight": 5
+		},
+		{
+		  "id": "nip_zoomies",
+		  "headline": "Zoomies epidemic linked to nip",
+		  "shape": "crash",
+		  "impact": -24,
+		  "delay": 1.5,
+		  "duration": 5,
+		  "weight": 6
+		},
+		{
+		  "id": "nip_bumper_harvest",
+		  "headline": "Bumper catnip harvest across the valleys",
+		  "shape": "drift",
+		  "impact": -20,
+		  "delay": 2.5,
+		  "duration": 6,
+		  "weight": 6
+		},
+		{
+		  "id": "nip_shortage",
+		  "headline": "GREAT CATNIP SHORTAGE grips the nation",
+		  "shape": "spike",
+		  "impact": 28,
+		  "delay": 2.5,
+		  "duration": 6,
+		  "weight": 4,
+		  "chain": {
+			"event": "nip_correction",
+			"delay": 4.0
+		  }
+		},
+		{
+		  "id": "nip_correction",
+		  "headline": "Cats give up and just nap it off",
+		  "shape": "drift",
+		  "impact": -18,
+		  "delay": 1.0,
+		  "duration": 5,
+		  "weight": 0
+		}
+	  ]
+	},
+	"5": {
+	  "name": "Laser",
+	  "stock": "LASER",
+	  "start_price": 100,
+	  "volatility": 0.04,
+	  "event_interval": [
+		4,
+		6
+	  ],
+	  "events": [
+		{
+		  "id": "laser_dot3000",
+		  "headline": "LaserCorp unveils the DOT 3000, analysts lose their minds",
+		  "shape": "pop_fade",
+		  "impact": 40,
+		  "delay": 2.0,
+		  "duration": 7,
+		  "weight": 7
+		},
+		{
+		  "id": "laser_toy_of_year",
+		  "headline": "Red dot named Toy of the Year",
+		  "shape": "spike",
+		  "impact": 22,
+		  "delay": 2.0,
+		  "duration": 5,
+		  "weight": 7
+		},
+		{
+		  "id": "laser_recall",
+		  "headline": "Recall after a cat chases the dot off a table",
+		  "shape": "crash",
+		  "impact": -30,
+		  "delay": 1.5,
+		  "duration": 5,
+		  "weight": 6
+		},
+		{
+		  "id": "laser_rival",
+		  "headline": "Rival launches the DOT 3000 Pro",
+		  "shape": "pop_fade",
+		  "impact": -22,
+		  "delay": 2.0,
+		  "duration": 6,
+		  "weight": 5
+		},
+		{
+		  "id": "laser_factory_fire",
+		  "headline": "Laser factory goes up in (literal) smoke",
+		  "shape": "spike",
+		  "impact": 28,
+		  "delay": 2.0,
+		  "duration": 6,
+		  "weight": 5
+		},
+		{
+		  "id": "laser_bubble_burst",
+		  "headline": "Investors realise it is, in fact, just a red dot",
+		  "shape": "crash",
+		  "impact": -35,
+		  "delay": 2.0,
+		  "duration": 6,
+		  "weight": 4
+		}
+	  ]
+	}
   }
 }

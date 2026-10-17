@@ -18,17 +18,21 @@ signal round_started
 signal round_ended(final_net_worth: float, profit: float)
 
 @export var round_length: float = 60.0      # seconds per round
-@export var seconds_per_tick: float = 0.33   # two market tick per second
+@export var seconds_per_tick: float = 0.33  # about three market ticks per second
 @export var starting_cash: float = 1000.0
 ## Ticks simulated before each round, so the graph has history to show.
 @export var warmup_ticks: int = 60
-## Optional: drag the PriceGraph node onto this in the Inspector.
+## Which level of events.json to play (1 = the first level).
+@export var level_id: int = 1
+## The graph is a direct child of this node.
 @onready var graph: PriceGraph = $PriceGraph
 @onready var price_graph: PriceGraph = $PriceGraph
 
 const SYMBOL := "CAT"
 
 var market: StockMarket
+var events: EventManager      # NEW: picks and fires the curated events
+var news_banner: NewsBanner   # NEW: on-screen headline banner
 var cash: float = 0.0
 var shares: int = 0
 var time_left: float = 0.0
@@ -45,17 +49,26 @@ var _tick_accum: float = 0.0
 
 
 func _ready() -> void:
+	_ensure_news_banner()
 	start_round()
 
 
 ## Starts a fresh round with a brand-new market. Call this from a menu too.
 func start_round() -> void:
 	market = StockMarket.new()
-	market.event_chance = 0.04   # about 2-3 news events per 60-second round
+	market.event_chance = 0.0   # random news OFF: EventManager drives the events now
 	# Stock.new(symbol, price, volatility, beta, mean_reversion)
-	# Short rounds need big, quick swings, and some pull back toward $100
-	# so there are real chances to buy low and sell high.
 	market.add_stock(StockMarket.Stock.new(SYMBOL, 100.0, 0.025, 1.0, 0.03))
+
+	# Hand the new market to the EventManager. start_level() also resets the
+	# stock's start price / volatility from events.json, so it has to come
+	# BEFORE the warm-up below (which builds the price history for the graph).
+	_ensure_events()
+	events.set_market(market)
+	events.market_symbol = SYMBOL
+	events.seconds_per_tick = seconds_per_tick
+	events.start_level(level_id)
+
 	market.run(warmup_ticks)
 	market.news_posted.connect(_on_news)
 
@@ -77,6 +90,8 @@ func start_round() -> void:
 func end_round() -> void:
 	round_active = false
 	time_left = 0.0
+	if events:
+		events.stop()
 	_update_clock()
 
 	var worth := net_worth()   # any shares you still hold count at the current price
@@ -135,8 +150,78 @@ func _update_clock() -> void:
 		
 
 
+# ---------------------------------------------------------------------
+# EVENTS: headlines and visuals (NEW)
+# ---------------------------------------------------------------------
+
+## Creates the EventManager once and connects its two signals.
+func _ensure_events() -> void:
+	if events:
+		return
+	events = EventManager.new()
+	events.name = "EventManager"
+	add_child(events)
+	events.headline_posted.connect(_on_headline)
+	events.event_applied.connect(_on_event_applied)
+
+
+## Creates the headline banner once. It is a child of the price graph, so it
+## slides down from the top edge of the monitor and the graph's clip_contents
+## hides it while it is "above" the screen.
+func _ensure_news_banner() -> void:
+	if news_banner:
+		return
+	news_banner = NewsBanner.new()
+	if graph:
+		graph.add_child(news_banner)
+	else:
+		# Fallback: no graph found, so show it at the top of the whole window.
+		var layer := CanvasLayer.new()
+		layer.layer = 10
+		add_child(layer)
+		layer.add_child(news_banner)
+	# Use the same lettering as the Cash label so the banner matches the HUD.
+	news_banner.copy_font_from(cash_label)
+
+
+## The headline appears FIRST (this is the player's reaction window)...
+func _on_headline(text: String) -> void:
+	print("HEADLINE: ", text)
+	if news_banner:
+		# Grey on purpose: the player has to work out which way the price will go.
+		news_banner.show_news(text)
+
+
+## ...and the price moves a couple of seconds later. Flash the graph to show it.
+func _on_event_applied(event: Dictionary) -> void:
+	if not round_active:
+		return
+	var impact := float(event.get("impact", 0.0))
+	_flash_graph(impact >= 0.0)
+
+
+## Only used if market.event_chance is ever turned back on (random news).
 func _on_news(_tick: int, _symbol: String, headline: String) -> void:
 	print("NEWS: ", headline)
+	if news_banner:
+		news_banner.show_news(headline)
+
+
+## Briefly tints the graph green (price jumped up) or red (price dropped).
+func _flash_graph(positive: bool) -> void:
+	if graph == null:
+		return
+	# self_modulate tints only the graph's own drawing, not the banner inside it.
+	graph.self_modulate = Color(0.55, 1.0, 0.55) if positive else Color(1.0, 0.45, 0.45)
+	create_tween().tween_property(graph, "self_modulate", Color.WHITE, 0.9)
+
+
+## DEBUG (delete later): fakes an event, headline first, price move 2 seconds later.
+func _debug_event(headline: String, shape: String, impact: float) -> void:
+	_on_headline(headline)
+	await get_tree().create_timer(2.0).timeout
+	market.apply_event(SYMBOL, shape, impact)
+	_on_event_applied({"impact": impact})
 
 # ---------------------------------------------------------------------
 
@@ -165,6 +250,12 @@ func _unhandled_input(event):
 		cat_paw.press_button_tween(sell_button.position)
 		sell_share()
 		Audio.play_angry_meow()
+
+	# DEBUG (delete later): 1 = fake good news, 2 = fake bad news.
+	elif event.keycode == KEY_1:
+		_debug_event("TEST: Big buyer arrives!", "spike", 15.0)
+	elif event.keycode == KEY_2:
+		_debug_event("TEST: Supply scare!", "crash", -20.0)
 
 
 func buy_share() -> void:
