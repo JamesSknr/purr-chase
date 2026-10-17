@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://s3rwrt58wisn"]
+
+[ext_resource type="PackedScene" uid="uid://0ychlkpant3a" path="res://scenes/cat_paw.tscn" id="1_g7g4h"]
+[ext_resource type="Script" uid="uid://cig4a81omwktx" path="res://scripts/level_logic.gd" id="1_j8ivh"]
+[ext_resource type="PackedScene" uid="uid://c08k3vd16rcer" path="res://scenes/buy_button.tscn" id="3_nd71p"]
+[ext_resource type="PackedScene" uid="uid://bdh6bjo0ow4il" path="res://scenes/sell_button.tscn" id="4_7ddre"]
+
+[node name="testScene" type="Node2D" unique_id=2012543513]
+script = ExtResource("1_j8ivh")
+seconds_per_tick = null
+starting_cash = null
+
+[node name="TableTemp" type="ColorRect" parent="." unique_id=291758808]
+offset_top = -1.0
+offset_right = 1150.0
+offset_bottom = 643.0
+color = Color(0.990763, 0.61327225, 0.36772475, 1)
+
+[node name="TabletTemp" type="ColorRect" parent="." unique_id=1735224390]
+offset_left = 26.0
+offset_top = 14.0
+offset_right = 835.0
+offset_bottom = 456.0
+color = Color(0.27509058, 0.27509058, 0.27509055, 1)
+
+[node name="TabletTemp2" type="ColorRect" parent="TabletTemp" unique_id=1637545397]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 12.0
+offset_right = 784.0
+offset_bottom = 422.0
+color = Color(0.14767197, 0.14767176, 0.14767179, 1)
+
+[node name="ClockTemp" type="ColorRect" parent="." unique_id=1459985845]
+offset_left = 863.0
+offset_top = 428.0
+offset_right = 1121.0
+offset_bottom = 622.0
+color = Color(0.19554523, 0.19554508, 0.19554508, 1)
+
+[node name="Label" type="Label" parent="ClockTemp" unique_id=751303695]
+layout_mode = 0
+offset_left = 44.0
+offset_top = 42.0
+offset_right = 222.0
+offset_bottom = 144.0
+theme_override_font_sizes/font_size = 55
+text = "CLOCK"
+
+[node name="BuyButton" parent="." unique_id=1816091244 instance=ExtResource("3_nd71p")]
+position = Vector2(138, 482)
+
+[node name="SellButton" parent="." unique_id=948599088 instance=ExtResource("4_7ddre")]
+position = Vector2(737, 484)
+
+[node name="CatPaw" parent="." unique_id=1855701812 instance=ExtResource("1_g7g4h")]
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 428.0
+offset_top = 562.0
+offset_right = 428.0
+offset_bottom = 562.0
+grow_horizontal = 0
+
+[node name="PriceLabel" type="Label" parent="." unique_id=1107326649]
+offset_left = 220.0
+offset_top = 40.0
+offset_right = 601.0
+offset_bottom = 212.0
+
+[node name="CashLabel" type="Label" parent="." unique_id=781126470]
+offset_left = 72.0
+offset_top = 232.0
+offset_right = 453.0
+offset_bottom = 404.0
+
+[node name="SharesLabel" type="Label" parent="." unique_id=1111676906]
+offset_left = 473.0
+offset_top = 241.0
+offset_right = 764.0
+offset_bottom = 375.0
