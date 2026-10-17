@@ -15,6 +15,7 @@ func _process(delta: float) -> void:
 
 
 func press_button_tween() -> void:
+	$"../ButtonClick".play()
 	if tween and tween.is_running():
 		tween.kill()
 
