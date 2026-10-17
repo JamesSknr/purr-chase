@@ -1,5 +1,5 @@
 extends Node2D
-@onready var cat_hand_placeholder: Sprite2D = $CatHandPlaceholder
+@onready var cat_paw_sprite: Sprite2D = $CatPawSprite
 
 
 # Called when the node enters the scene tree for the first time.
@@ -18,7 +18,7 @@ func _input(event):
 		print("Mouse Click/Unclick at: ", event.position)
 	elif event is InputEventMouseMotion:
 		print("Mouse Motion at: ", event.position)
-		cat_hand_placeholder.position = event.position + Vector2(0,120)
+		cat_paw_sprite.position = event.position + Vector2(0,120)
 
 	# Print the size of the viewport.
 	print("Viewport Resolution is: ", get_viewport().get_visible_rect().size)
