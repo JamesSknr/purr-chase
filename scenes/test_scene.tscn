@@ -4,10 +4,11 @@
 [ext_resource type="Script" uid="uid://cig4a81omwktx" path="res://scripts/level_logic.gd" id="1_j8ivh"]
 [ext_resource type="Shader" uid="uid://beuvpclwtqb7s" path="res://shaders/AnimatedPatternBackground.gdshader" id="2_3qnke"]
 [ext_resource type="Texture2D" uid="uid://ckcdlvgej7asn" path="res://art/Living Room Background.png" id="2_rnaij"]
-[ext_resource type="PackedScene" uid="uid://c08k3vd16rcer" path="res://scenes/buy_button.tscn" id="3_nd71p"]
+[ext_resource type="PackedScene" uid="uid://bgmm8il27e1p" path="res://scenes/buy_button.tscn" id="3_nd71p"]
 [ext_resource type="Texture2D" uid="uid://cp415upxgcnm0" path="res://art/cat_paw.png" id="3_wtsjf"]
-[ext_resource type="PackedScene" uid="uid://bdh6bjo0ow4il" path="res://scenes/sell_button.tscn" id="4_7ddre"]
+[ext_resource type="PackedScene" uid="uid://bwfuk4yj0u48s" path="res://scenes/sell_button.tscn" id="4_7ddre"]
 [ext_resource type="Script" uid="uid://wyp7h10gg56s" path="res://scripts/price_graph.gd" id="4_wtsjf"]
+[ext_resource type="PackedScene" uid="uid://bqcqwkkeod8sk" path="res://scenes/clock.tscn" id="9_h3xc6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rnaij"]
 shader = ExtResource("2_3qnke")
@@ -67,9 +68,9 @@ color = Color(0.19554523, 0.19554508, 0.19554508, 1)
 
 [node name="Label" type="Label" parent="ClockTemp" unique_id=751303695]
 layout_mode = 0
-offset_left = 44.0
+offset_left = 45.0
 offset_top = 42.0
-offset_right = 222.0
+offset_right = 223.0
 offset_bottom = 144.0
 theme_override_font_sizes/font_size = 55
 text = "CLOCK"
@@ -108,3 +109,7 @@ offset_left = 534.0
 offset_top = 283.0
 offset_right = 825.0
 offset_bottom = 417.0
+
+[node name="clock" parent="." unique_id=1996270700 instance=ExtResource("9_h3xc6")]
+position = Vector2(1035, 458)
+scale = Vector2(0.7478293, 0.7478293)

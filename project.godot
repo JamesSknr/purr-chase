@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="purr-chase"
-run/main_scene="uid://s3rwrt58wisn"
+run/main_scene="uid://cwokmogupy76"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://art/icon.svg"
 

@@ -5,6 +5,7 @@
 [ext_resource type="Shader" uid="uid://beuvpclwtqb7s" path="res://shaders/AnimatedPatternBackground.gdshader" id="2_11y2r"]
 [ext_resource type="Texture2D" uid="uid://cp415upxgcnm0" path="res://art/cat_paw.png" id="2_o0tnf"]
 [ext_resource type="Texture2D" uid="uid://dmcgq4hlsvcd" path="res://art/Cat Paw.png" id="5_jmdev"]
+[ext_resource type="AudioStream" uid="uid://v62hjpmaem51" path="res://SFX/Button Click.mp3" id="6_b6cxs"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o0tnf"]
 shader = ExtResource("2_11y2r")
@@ -119,6 +120,10 @@ position = Vector2(917.00006, 506.99994)
 scale = Vector2(0.16038592, 0.16038594)
 texture = ExtResource("5_jmdev")
 offset = Vector2(0, 3100)
+
+[node name="ButtonClick" type="AudioStreamPlayer" parent="." unique_id=1239364419]
+stream = ExtResource("6_b6cxs")
+volume_db = 8.667
 
 [connection signal="pressed" from="PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="QuitButton" to="." method="_on_quit_button_pressed"]
