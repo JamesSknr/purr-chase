@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cp415upxgcnm0"
-path="res://.godot/imported/cat_paw.png-3ca65ea4d106b356b0a35a161263cda3.ctex"
+uid="uid://b6pj6ic1ob1br"
+path="res://.godot/imported/StickyNote.png-a27f4c1c3848090c778bb8158ef3483e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/cat_paw.png"
-dest_files=["res://.godot/imported/cat_paw.png-3ca65ea4d106b356b0a35a161263cda3.ctex"]
+source_file="res://art/StickyNote.png"
+dest_files=["res://.godot/imported/StickyNote.png-a27f4c1c3848090c778bb8158ef3483e.ctex"]
 
 [params]
 

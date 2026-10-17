@@ -6,11 +6,13 @@
 [ext_resource type="Texture2D" uid="uid://ckcdlvgej7asn" path="res://art/Living Room Background.png" id="2_rnaij"]
 [ext_resource type="PackedScene" uid="uid://bgmm8il27e1p" path="res://scenes/buy_button.tscn" id="3_nd71p"]
 [ext_resource type="Texture2D" uid="uid://c8i2xbxqneg22" path="res://art/monitor.png" id="3_s36qc"]
-[ext_resource type="Texture2D" uid="uid://cp415upxgcnm0" path="res://art/cat_paw.png" id="3_wtsjf"]
+[ext_resource type="Texture2D" uid="uid://cp415upxgcnm0" path="res://art/CatPawIcon.png" id="3_wtsjf"]
 [ext_resource type="PackedScene" uid="uid://bwfuk4yj0u48s" path="res://scenes/sell_button.tscn" id="4_7ddre"]
 [ext_resource type="Script" uid="uid://wyp7h10gg56s" path="res://scripts/price_graph.gd" id="4_wtsjf"]
 [ext_resource type="PackedScene" uid="uid://bqcqwkkeod8sk" path="res://scenes/clock.tscn" id="9_h3xc6"]
 [ext_resource type="FontFile" uid="uid://cokcitl7rd7kp" path="res://art/DarumadropOne-Regular.ttf" id="10_6qxox"]
+[ext_resource type="Texture2D" uid="uid://b6pj6ic1ob1br" path="res://art/StickyNote.png" id="12_gthg3"]
+[ext_resource type="Shader" uid="uid://dg1hrhvaer44r" path="res://shaders/CrtEffect.gdshader" id="13_ntc4i"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rnaij"]
 shader = ExtResource("2_3qnke")
@@ -19,6 +21,16 @@ shader_parameter/pattern_color = Color(0.029506553, 0.029506562, 0.029506536, 1)
 shader_parameter/tiling = 100.0
 shader_parameter/speed = Vector2(0.1, 0.5)
 shader_parameter/rotation = 0.70981485014235
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u0xbq"]
+shader = ExtResource("13_ntc4i")
+shader_parameter/resolution = Vector2(315.285, 109.755)
+shader_parameter/scan_line_amount = 0.02700000128249999
+shader_parameter/warp_amount = 0.05
+shader_parameter/vignette_amount = 0.62000002945
+shader_parameter/vignette_intensity = 0.1390000066025
+shader_parameter/grille_amount = 0.05
+shader_parameter/brightness_boost = 1.262000012445
 
 [node name="testScene" type="Node2D" unique_id=2012543513]
 script = ExtResource("1_j8ivh")
@@ -60,10 +72,10 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 428.0
-offset_top = 562.0
-offset_right = 428.0
-offset_bottom = 562.0
+offset_left = 453.0
+offset_top = 519.0
+offset_right = 453.0
+offset_bottom = 519.0
 grow_horizontal = 0
 
 [node name="SharesLabel" type="Label" parent="." unique_id=1111676906]
@@ -96,3 +108,25 @@ text = "CAT $99.99 (+1.0%)"
 [node name="clock" parent="." unique_id=1996270700 instance=ExtResource("9_h3xc6")]
 position = Vector2(1002.99994, 445)
 scale = Vector2(0.7478293, 0.7478293)
+
+[node name="StickyNote" type="Sprite2D" parent="." unique_id=290337768]
+position = Vector2(168, 87)
+scale = Vector2(0.19645762, 0.19645762)
+texture = ExtResource("12_gthg3")
+
+[node name="PriceLabel2" type="Label" parent="StickyNote" unique_id=983400297]
+offset_left = -300.31885
+offset_top = -290.13892
+offset_right = 1034.6812
+offset_bottom = 178.86108
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_6qxox")
+theme_override_font_sizes/font_size = 128
+text = "Work Day
+9 - 5"
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2027861071]
+material = SubResource("ShaderMaterial_u0xbq")
+offset_right = 1152.0
+offset_bottom = 649.0

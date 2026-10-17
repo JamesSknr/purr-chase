@@ -3,50 +3,89 @@
 [ext_resource type="Script" uid="uid://8pwt0828liuo" path="res://scenes/menu.gd" id="1_jmdev"]
 [ext_resource type="FontFile" uid="uid://cokcitl7rd7kp" path="res://art/DarumadropOne-Regular.ttf" id="1_upctu"]
 [ext_resource type="Shader" uid="uid://beuvpclwtqb7s" path="res://shaders/AnimatedPatternBackground.gdshader" id="2_11y2r"]
-[ext_resource type="Texture2D" uid="uid://cp415upxgcnm0" path="res://art/cat_paw.png" id="2_o0tnf"]
+[ext_resource type="Texture2D" uid="uid://cp415upxgcnm0" path="res://art/CatPawIcon.png" id="2_o0tnf"]
+[ext_resource type="Texture2D" uid="uid://h2qu76d2t6g2" path="res://art/BallOfYarn.png" id="3_2af52"]
+[ext_resource type="Texture2D" uid="uid://ckcdlvgej7asn" path="res://art/Living Room Background.png" id="4_1abgu"]
+[ext_resource type="Texture2D" uid="uid://c8i2xbxqneg22" path="res://art/monitor.png" id="4_thu7x"]
 [ext_resource type="PackedScene" uid="uid://4yt8pa0vwxtw" path="res://scenes/cat_paw.tscn" id="6_aaywf"]
-[ext_resource type="AudioStream" uid="uid://v62hjpmaem51" path="res://SFX/Button Click.mp3" id="6_b6cxs"]
+[ext_resource type="Script" uid="uid://wyp7h10gg56s" path="res://scripts/price_graph.gd" id="7_2af52"]
+[ext_resource type="Script" uid="uid://xfd1d5e7ld1q" path="res://scenes/cat_menu_paw_controller.gd" id="7_aaywf"]
+[ext_resource type="PackedScene" uid="uid://41n2eyh8wgw" path="res://scenes/quit_button.tscn" id="8_thu7x"]
+[ext_resource type="PackedScene" uid="uid://bqcqwkkeod8sk" path="res://scenes/clock.tscn" id="10_6c8sk"]
+[ext_resource type="Texture2D" uid="uid://b6pj6ic1ob1br" path="res://art/StickyNote.png" id="11_5p0sf"]
+[ext_resource type="PackedScene" uid="uid://pqhhbjv3k6fa" path="res://scenes/play_button.tscn" id="13_thu7x"]
+[ext_resource type="Shader" uid="uid://dg1hrhvaer44r" path="res://shaders/CrtEffect.gdshader" id="15_7ycwl"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o0tnf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7t7qg"]
 shader = ExtResource("2_11y2r")
 shader_parameter/pattern = ExtResource("2_o0tnf")
-shader_parameter/pattern_color = Color(1, 0.39285982, 0.37438384, 1)
+shader_parameter/pattern_color = Color(0.029506553, 0.029506562, 0.029506536, 1)
 shader_parameter/tiling = 100.0
 shader_parameter/speed = Vector2(0.1, 0.5)
 shader_parameter/rotation = 0.70981485014235
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jmdev"]
-bg_color = Color(1, 0.23529412, 0.25490198, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aaywf"]
-bg_color = Color(0.99998754, 0.3327004, 0.32532907, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rtd1e"]
+shader = ExtResource("15_7ycwl")
+shader_parameter/resolution = Vector2(315.285, 109.755)
+shader_parameter/scan_line_amount = 0.027000001282499998
+shader_parameter/warp_amount = 0.05
+shader_parameter/vignette_amount = 0.62000002945
+shader_parameter/vignette_intensity = 0.1390000066025
+shader_parameter/grille_amount = 0.05
+shader_parameter/brightness_boost = 1.262000012445
 
 [node name="Menu" type="Node2D" unique_id=737549228]
 script = ExtResource("1_jmdev")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=922380235]
-material = SubResource("ShaderMaterial_o0tnf")
-offset_right = 1183.0
-offset_bottom = 675.0
-color = Color(0.99999994, 0.6751425, 0.39867917, 1)
+[node name="LivingRoomBackground" type="Sprite2D" parent="." unique_id=1258255650]
+position = Vector2(576, 324)
+scale = Vector2(0.26568267, 0.2525331)
+texture = ExtResource("4_1abgu")
+
+[node name="BallOfYarn" type="Sprite2D" parent="." unique_id=2054261717]
+modulate = Color(1, 1, 0.84705883, 1)
+position = Vector2(114, 412)
+scale = Vector2(0.20339262, 0.20339262)
+texture = ExtResource("3_2af52")
+
+[node name="BallOfYarn2" type="Sprite2D" parent="BallOfYarn" unique_id=334007567]
+modulate = Color(0, 0, 0, 0.09803922)
+show_behind_parent = true
+position = Vector2(-9.833191, 19.666504)
+texture = ExtResource("3_2af52")
+
+[node name="Monitor" type="Sprite2D" parent="." unique_id=879694641]
+position = Vector2(580, 307)
+texture = ExtResource("4_thu7x")
+
+[node name="GraphBackground" type="ColorRect" parent="." unique_id=990765703]
+material = SubResource("ShaderMaterial_7t7qg")
+offset_left = 250.0
+offset_top = 26.0
+offset_right = 899.0
+offset_bottom = 443.0
+color = Color(2.6095218e-05, 2.6095217e-05, 2.6095213e-05, 1)
+
+[node name="PriceGraph" type="Control" parent="." unique_id=1932050549]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 108.0
+offset_top = 31.0
+offset_right = 757.0
+offset_bottom = 448.0
+script = ExtResource("7_2af52")
+
+[node name="PlayButton" parent="." unique_id=1816091244 instance=ExtResource("13_thu7x")]
+position = Vector2(280, 477)
+
+[node name="QuitButton" parent="." unique_id=395582325 instance=ExtResource("8_thu7x")]
+position = Vector2(879, 479)
+
+[node name="clock" parent="." unique_id=1996270700 instance=ExtResource("10_6c8sk")]
+visible = false
+position = Vector2(1002.99994, 445)
+scale = Vector2(0.7478293, 0.7478293)
 
 [node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=983524065]
 anchors_preset = 6
@@ -54,9 +93,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 2.0
-offset_right = 1154.0
-offset_bottom = 128.0
+offset_left = 23.0
+offset_top = 170.0
+offset_right = 1175.0
+offset_bottom = 298.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -65,65 +105,39 @@ theme_override_constants/shadow_offset_x = 13
 theme_override_constants/shadow_offset_y = 7
 theme_override_constants/outline_size = 14
 theme_override_fonts/normal_font = ExtResource("1_upctu")
-theme_override_font_sizes/normal_font_size = 80
+theme_override_font_sizes/normal_font_size = 70
 text = "Purr-chase Stocks!"
 horizontal_alignment = 1
 
-[node name="PlayButton" type="Button" parent="." unique_id=1030652792]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 14.0
-offset_top = 340.0
-offset_right = 473.0
-offset_bottom = 465.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 14
-theme_override_fonts/font = ExtResource("1_upctu")
-theme_override_font_sizes/font_size = 80
-theme_override_styles/normal = SubResource("StyleBoxFlat_jmdev")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_jmdev")
-theme_override_styles/hover = SubResource("StyleBoxFlat_aaywf")
-text = "Play"
+[node name="StickyNote" type="Sprite2D" parent="." unique_id=2026184983]
+position = Vector2(310, 82)
+scale = Vector2(0.19645762, 0.19645762)
+texture = ExtResource("11_5p0sf")
 
-[node name="QuitButton" type="Button" parent="." unique_id=1491924268]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 730.0
-offset_top = 345.0
-offset_right = 1189.0
-offset_bottom = 470.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 14
+[node name="PriceLabel2" type="Label" parent="StickyNote" unique_id=298669694]
+offset_left = -300.31885
+offset_top = -290.13892
+offset_right = 1034.6812
+offset_bottom = 178.86108
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_upctu")
-theme_override_font_sizes/font_size = 80
-theme_override_styles/normal = SubResource("StyleBoxFlat_jmdev")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_jmdev")
-theme_override_styles/hover = SubResource("StyleBoxFlat_aaywf")
-text = "Quit"
-
-[node name="ButtonClick" type="AudioStreamPlayer" parent="." unique_id=1239364419]
-stream = ExtResource("6_b6cxs")
-volume_db = 8.667
+theme_override_font_sizes/font_size = 128
+text = "Work Day
+9 - 5"
+metadata/_edit_use_anchors_ = true
 
 [node name="CatPaw" parent="." unique_id=1855701812 instance=ExtResource("6_aaywf")]
-offset_left = 636.0
-offset_top = 346.0
-offset_right = 643.52795
-offset_bottom = 357.016
+offset_left = 578.0
+offset_top = 486.99997
+offset_right = 585.52783
+offset_bottom = 498.01584
+rotation = -0.28081766
+script = ExtResource("7_aaywf")
+move_duration = 0.2
+idle_distance = 5.0
+idle_duration = 1.2
 
-[connection signal="pressed" from="PlayButton" to="." method="_on_play_button_pressed"]
-[connection signal="pressed" from="QuitButton" to="." method="_on_quit_button_pressed"]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1518445445]
+material = SubResource("ShaderMaterial_rtd1e")
+offset_right = 1152.0
+offset_bottom = 649.0

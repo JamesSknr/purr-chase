@@ -1,8 +1,9 @@
 extends Node2D
-@onready var cat_paw: Cat = $CatPaw
 
-@onready var play_button: Button = $PlayButton
-@onready var quit_button: Button = $QuitButton
+@onready var cat_paw: Control = $CatPaw
+
+@onready var play_button: Node2D = $PlayButton
+@onready var quit_button: Node2D = $QuitButton
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -22,20 +23,15 @@ func _unhandled_input(event):
 
 	# If 'A' key is pressed buy a share
 	if event.keycode == KEY_A:
-		cat_paw.press_button_tween(play_button.position)
+		await cat_paw.move_to_button(play_button.position)
+		play_button.press_button_tween()
+		await cat_paw.press_and_return()
+		get_tree().change_scene_to_file("res://scenes/test_scene.tscn")
 
 	# If 'D' key is pressed sell a share
 	elif event.keycode == KEY_D:
 
-		cat_paw.press_button_tween(quit_button.position)
-
-
-func _on_play_button_pressed() -> void:
-	$ButtonClick.play()
-	get_tree().change_scene_to_file("res://scenes/test_scene.tscn")
-
-
-
-func _on_quit_button_pressed() -> void:
-	$ButtonClick.play()
-	get_tree().quit()
+			await cat_paw.move_to_button(quit_button.position)
+			quit_button.press_button_tween()
+			await cat_paw.press_and_return()
+			get_tree().quit()
