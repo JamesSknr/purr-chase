@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://0ychlkpant3a"]
+[gd_scene format=3 uid="uid://4yt8pa0vwxtw"]
 
-[ext_resource type="Script" uid="uid://brokrr0sbu05j" path="res://scripts/cat_paw_controller.gd" id="1_8td5k"]
+[ext_resource type="Script" path="res://scripts/cat_paw_controller.gd" id="1_8td5k"]
 [ext_resource type="Texture2D" uid="uid://bh1ba6y1ltl6o" path="res://art/cat_hand_placeholder.webp" id="1_sb1gb"]
 
 [node name="CatPaw" type="Control" unique_id=1855701812]
