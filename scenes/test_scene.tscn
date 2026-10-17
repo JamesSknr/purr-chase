@@ -55,10 +55,10 @@ color = Color(2.6095218e-05, 2.6095217e-05, 2.6095213e-05, 1)
 [node name="PriceGraph" type="Control" parent="." unique_id=1621626241]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 108.0
-offset_top = 31.0
-offset_right = 757.0
-offset_bottom = 448.0
+offset_left = 109.0
+offset_top = 141.0
+offset_right = 593.02637
+offset_bottom = 452.0
 script = ExtResource("4_wtsjf")
 
 [node name="BuyButton" parent="." unique_id=1816091244 instance=ExtResource("3_nd71p")]
@@ -80,28 +80,28 @@ grow_horizontal = 0
 rotation = -0.2692296
 
 [node name="SharesLabel" type="Label" parent="." unique_id=1111676906]
-offset_left = 307.0
-offset_top = 25.0
-offset_right = 598.0
-offset_bottom = 159.0
+offset_left = 187.0
+offset_top = 312.0
+offset_right = 478.0
+offset_bottom = 446.0
 theme_override_fonts/font = ExtResource("10_6qxox")
 theme_override_font_sizes/font_size = 32
 text = "Shares:0"
 
 [node name="CashLabel" type="Label" parent="." unique_id=781126470]
-offset_left = 307.0
-offset_top = 55.0
-offset_right = 688.0
-offset_bottom = 227.0
+offset_left = 187.0
+offset_top = 342.0
+offset_right = 568.0
+offset_bottom = 514.0
 theme_override_fonts/font = ExtResource("10_6qxox")
 theme_override_font_sizes/font_size = 32
 text = "Cash $"
 
 [node name="PriceLabel" type="Label" parent="." unique_id=1107326649]
-offset_left = 307.0
-offset_top = 88.0
-offset_right = 688.0
-offset_bottom = 260.0
+offset_left = 187.0
+offset_top = 375.0
+offset_right = 568.0
+offset_bottom = 547.0
 theme_override_fonts/font = ExtResource("10_6qxox")
 theme_override_font_sizes/font_size = 32
 text = "CAT $99.99 (+1.0%)"
@@ -115,7 +115,7 @@ position = Vector2(168, 87)
 scale = Vector2(0.19645762, 0.19645762)
 texture = ExtResource("12_gthg3")
 
-[node name="PriceLabel2" type="Label" parent="StickyNote" unique_id=983400297]
+[node name="WorkDayLabel" type="Label" parent="StickyNote" unique_id=983400297]
 offset_left = -300.31885
 offset_top = -290.13892
 offset_right = 1034.6812
