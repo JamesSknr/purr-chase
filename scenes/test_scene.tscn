@@ -22,7 +22,7 @@ shader_parameter/tiling = 100.0
 shader_parameter/speed = Vector2(0.1, 0.5)
 shader_parameter/rotation = 0.70981485014235
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_u0xbq"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rtd1e"]
 shader = ExtResource("13_ntc4i")
 shader_parameter/resolution = Vector2(315.285, 109.755)
 shader_parameter/scan_line_amount = 0.02700000128249999
@@ -127,7 +127,7 @@ text = "Work Day
 9 - 5"
 metadata/_edit_use_anchors_ = true
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=2027861071]
-material = SubResource("ShaderMaterial_u0xbq")
+[node name="ColorRect" type="ColorRect" parent="." unique_id=341712038]
+material = SubResource("ShaderMaterial_rtd1e")
 offset_right = 1152.0
 offset_bottom = 649.0

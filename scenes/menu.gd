@@ -27,7 +27,7 @@ func _unhandled_input(event):
 		await cat_paw.move_to_button(play_button.position)
 		play_button.press_button_tween()
 		await cat_paw.press_and_return()
-		get_tree().change_scene_to_file("res://scenes/test_scene.tscn")
+		SceneTransition.change_scene_to_file("res://scenes/test_scene.tscn")
 
 	# If 'D' key is pressed sell a share
 	elif event.keycode == KEY_D:

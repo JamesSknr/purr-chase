@@ -1,0 +1,115 @@
+[gd_scene format=3 uid="uid://ewser8mpg3lb"]
+
+[ext_resource type="Script" uid="uid://bfx2rdbdb25ob" path="res://scripts/scene_transition.gd" id="1_rujfs"]
+[ext_resource type="Texture2D" uid="uid://cp415upxgcnm0" path="res://art/CatPawIcon.png" id="3_hgfgv"]
+
+[sub_resource type="Shader" id="Shader_rujfs"]
+code = "shader_type canvas_item;
+
+// Shader for creating an animated pattern background.
+// Works well with kenney's pattern pack: https://kenney.nl/assets/pattern-pack-extra
+
+// Assign this shader to a ColorRect node and set \"Anchors Preset\" to \"Full Rect\" to create a background.
+// Works with other 2D nodes as well.
+
+// Assign the pattern texture here.
+// Should be a black and white square texture containing the base pattern.
+uniform sampler2D pattern: repeat_enable;
+// The color you want the pattern to appear as.
+uniform vec4 pattern_color: source_color = vec4(1.0);
+
+// Factor by which UVs are divided.
+// Affects the size of each repeating pattern.
+uniform float tiling = 100.0;
+// How fast the background moves.
+uniform vec2 speed = vec2(0.1, 0.5);
+// Rotation of the base pattern in a range from -2pi to 2pi.
+// You can also use a range from -360 to 360 degrees and convert to radians in the vertex shader.
+uniform float rotation: hint_range(-6.28318530717959, 6.28318530717959) = 0.0;
+
+// Compute UVs in the vertex shader and pass them to the fragment shader.
+varying vec2 tiled_uv;
+
+// Called for every vertex the material is visible on.
+void vertex() {
+	// Compute UVs to sample the pattern texture
+	// We use VERTEX instead of UV to avoid stretching on rectangular backgrounds
+	tiled_uv = VERTEX / tiling + TIME * speed;
+	// Apply a rotation using a rotation matrix
+	float c = cos(rotation);
+	float s = sin(rotation);
+	tiled_uv = mat2(vec2(c, -s), vec2(s, c)) * tiled_uv;
+}
+
+// Called for every pixel the material is visible on.
+void fragment() {
+	float node_alpha = COLOR.a;
+	vec4 pattern_tex = texture(pattern, tiled_uv);
+
+	COLOR = mix(COLOR, pattern_color, pattern_tex);
+	COLOR.a *= node_alpha;
+} 
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_85h84"]
+shader = SubResource("Shader_rujfs")
+shader_parameter/pattern = ExtResource("3_hgfgv")
+shader_parameter/pattern_color = Color(0.99999994, 0.5913386, 0.2806478, 1)
+shader_parameter/tiling = 100.0
+shader_parameter/speed = Vector2(0.1, 0.5)
+shader_parameter/rotation = 0.42981483684235045
+
+[sub_resource type="Animation" id="Animation_2sgj6"]
+resource_name = "RESET"
+length = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DissolveRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_hgfgv"]
+resource_name = "dissolve"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DissolveRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_85h84"]
+_data = {
+&"RESET": SubResource("Animation_2sgj6"),
+&"dissolve": SubResource("Animation_hgfgv")
+}
+
+[node name="SceneTransition" type="CanvasLayer" unique_id=224705342]
+script = ExtResource("1_rujfs")
+
+[node name="DissolveRect" type="ColorRect" parent="." unique_id=1523289424]
+modulate = Color(1, 1, 1, 0)
+material = SubResource("ShaderMaterial_85h84")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.98010975, 0.7602776, 0.28549725, 1)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=143170167]
+libraries/ = SubResource("AnimationLibrary_85h84")
