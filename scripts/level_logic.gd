@@ -3,8 +3,9 @@ enum action {BUY, SELL, HOLD}
 var current_action = action.HOLD
 
 @onready var cat_paw: Cat = $CatPaw
-@onready var buy_button: BigButton = $BuyButton
-@onready var sell_button: BigButton = $SellButton
+@onready var buy_button: Node2D = $BuyButton
+@onready var sell_button: Node2D = $SellButton
+
 
 
 # ---------------------------------------------------------------------
