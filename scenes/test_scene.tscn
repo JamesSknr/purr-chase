@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://c08k3vd16rcer" path="res://scenes/buy_button.tscn" id="3_nd71p"]
 [ext_resource type="Texture2D" uid="uid://cp415upxgcnm0" path="res://art/cat_paw.png" id="3_wtsjf"]
 [ext_resource type="PackedScene" uid="uid://bdh6bjo0ow4il" path="res://scenes/sell_button.tscn" id="4_7ddre"]
-[ext_resource type="Script" path="res://scripts/price_graph.gd" id="4_wtsjf"]
+[ext_resource type="Script" uid="uid://wyp7h10gg56s" path="res://scripts/price_graph.gd" id="4_wtsjf"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rnaij"]
 shader = ExtResource("2_3qnke")
