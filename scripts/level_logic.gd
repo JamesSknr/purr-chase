@@ -18,12 +18,13 @@ signal round_started
 signal round_ended(final_net_worth: float, profit: float)
 
 @export var round_length: float = 60.0      # seconds per round
-@export var seconds_per_tick: float = 0.5   # two market tick per second
+@export var seconds_per_tick: float = 0.33   # two market tick per second
 @export var starting_cash: float = 1000.0
 ## Ticks simulated before each round, so the graph has history to show.
 @export var warmup_ticks: int = 60
 ## Optional: drag the PriceGraph node onto this in the Inspector.
 @onready var graph: PriceGraph = $PriceGraph
+@onready var price_graph: PriceGraph = $PriceGraph
 
 const SYMBOL := "CAT"
 

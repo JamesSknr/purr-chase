@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://c08k3vd16rcer" path="res://scenes/buy_button.tscn" id="3_nd71p"]
 [ext_resource type="Texture2D" uid="uid://cp415upxgcnm0" path="res://art/cat_paw.png" id="3_wtsjf"]
 [ext_resource type="PackedScene" uid="uid://bdh6bjo0ow4il" path="res://scenes/sell_button.tscn" id="4_7ddre"]
-[ext_resource type="Script" path="res://scripts/price_graph.gd" id="4_wtsjf"]
+[ext_resource type="Script" uid="uid://wyp7h10gg56s" path="res://scripts/price_graph.gd" id="4_wtsjf"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rnaij"]
 shader = ExtResource("2_3qnke")
@@ -25,28 +25,37 @@ position = Vector2(597, 354)
 scale = Vector2(0.28780204, 0.287802)
 texture = ExtResource("2_rnaij")
 
-[node name="TabletTemp" type="ColorRect" parent="." unique_id=1735224390]
+[node name="TabletShadow" type="ColorRect" parent="." unique_id=751932422]
+offset_left = 26.0
+offset_top = 447.00003
+offset_right = 770.0
+offset_bottom = 732.00073
+scale = Vector2(1, 0.19999939)
+color = Color(0, 0, 0, 0.19215687)
+
+[node name="TabletBackground" type="ColorRect" parent="." unique_id=1735224390]
 offset_left = 26.0
 offset_top = 14.0
 offset_right = 770.0
 offset_bottom = 456.0
 color = Color(0.27509058, 0.27509058, 0.27509055, 1)
 
-[node name="GraphBackground" type="ColorRect" parent="." unique_id=112982288]
+[node name="GraphBackground" type="ColorRect" parent="TabletBackground" unique_id=112982288]
 material = SubResource("ShaderMaterial_rnaij")
-offset_left = 40.0
-offset_top = 26.0
-offset_right = 755.05774
-offset_bottom = 434.0
+layout_mode = 0
+offset_left = 14.0
+offset_top = 12.0
+offset_right = 729.05774
+offset_bottom = 420.0
 color = Color(2.6095218e-05, 2.6095217e-05, 2.6095213e-05, 1)
 
 [node name="PriceGraph" type="Control" parent="." unique_id=1621626241]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 224.0
-offset_top = 65.0
-offset_right = 620.0
-offset_bottom = 308.0
+offset_left = 40.0
+offset_top = 26.0
+offset_right = 755.0
+offset_bottom = 434.0
 script = ExtResource("4_wtsjf")
 
 [node name="ClockTemp" type="ColorRect" parent="." unique_id=1459985845]

@@ -17,3 +17,10 @@ script = ExtResource("1_8td5k")
 position = Vector2(-2, 597.9998)
 scale = Vector2(0.16038592, 0.16038594)
 texture = ExtResource("2_8td5k")
+
+[node name="CatPawSprite2" type="Sprite2D" parent="." unique_id=1418442198]
+modulate = Color(0, 0, 0, 0.12941177)
+show_behind_parent = true
+position = Vector2(-23.000004, 631)
+scale = Vector2(0.16038592, 0.16038594)
+texture = ExtResource("2_8td5k")

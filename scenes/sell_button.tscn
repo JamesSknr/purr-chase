@@ -14,3 +14,10 @@ texture = ExtResource("1_2wawk")
 [node name="ButtonBase" type="Sprite2D" parent="." unique_id=1093714706]
 scale = Vector2(0.12290625, 0.12290625)
 texture = ExtResource("2_iehiq")
+
+[node name="ButtonBase2" type="Sprite2D" parent="." unique_id=1525496307]
+modulate = Color(0, 0, 0, 0.18039216)
+show_behind_parent = true
+position = Vector2(0, 11)
+scale = Vector2(0.12290625, 0.12290625)
+texture = ExtResource("2_iehiq")
