@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://c8i2xbxqneg22" path="res://art/monitor.png" id="3_s36qc"]
 [ext_resource type="Texture2D" uid="uid://cp415upxgcnm0" path="res://art/CatPawIcon.png" id="3_wtsjf"]
 [ext_resource type="PackedScene" uid="uid://bwfuk4yj0u48s" path="res://scenes/sell_button.tscn" id="4_7ddre"]
-[ext_resource type="Script" uid="uid://wyp7h10gg56s" path="res://scripts/price_graph.gd" id="4_wtsjf"]
+[ext_resource type="Script" path="res://scripts/price_graph.gd" id="4_wtsjf"]
 [ext_resource type="PackedScene" uid="uid://bqcqwkkeod8sk" path="res://scenes/clock.tscn" id="9_h3xc6"]
 [ext_resource type="FontFile" uid="uid://cokcitl7rd7kp" path="res://art/DarumadropOne-Regular.ttf" id="10_6qxox"]
 [ext_resource type="Texture2D" uid="uid://b6pj6ic1ob1br" path="res://art/StickyNote.png" id="12_gthg3"]
@@ -72,11 +72,12 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 453.0
-offset_top = 519.0
-offset_right = 453.0
-offset_bottom = 519.0
+offset_left = 430.0
+offset_top = 515.0
+offset_right = 430.0
+offset_bottom = 515.0
 grow_horizontal = 0
+rotation = -0.2692296
 
 [node name="SharesLabel" type="Label" parent="." unique_id=1111676906]
 offset_left = 307.0

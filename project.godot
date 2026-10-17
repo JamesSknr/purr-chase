@@ -15,6 +15,10 @@ run/main_scene="uid://cwokmogupy76"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://art/icon.svg"
 
+[autoload]
+
+Audio="*uid://cvy3qb886xrew"
+
 [display]
 
 window/size/borderless=true

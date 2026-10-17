@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://pqhhbjv3k6fa"]
 
-[ext_resource type="Script" uid="uid://cly7r1pulhl2p" path="res://scripts/buy_button.gd" id="1_74fmh"]
+[ext_resource type="Script" path="res://scripts/buy_button.gd" id="1_74fmh"]
 [ext_resource type="Texture2D" uid="uid://cshixqu8sanmy" path="res://art/Green Button.png" id="2_74fmh"]
 [ext_resource type="Texture2D" uid="uid://c61vyc5episx3" path="res://art/Button Base.png" id="3_1uwlq"]
 [ext_resource type="FontFile" uid="uid://cokcitl7rd7kp" path="res://art/DarumadropOne-Regular.ttf" id="4_rlk2l"]

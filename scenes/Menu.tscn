@@ -8,8 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://ckcdlvgej7asn" path="res://art/Living Room Background.png" id="4_1abgu"]
 [ext_resource type="Texture2D" uid="uid://c8i2xbxqneg22" path="res://art/monitor.png" id="4_thu7x"]
 [ext_resource type="PackedScene" uid="uid://4yt8pa0vwxtw" path="res://scenes/cat_paw.tscn" id="6_aaywf"]
-[ext_resource type="Script" uid="uid://wyp7h10gg56s" path="res://scripts/price_graph.gd" id="7_2af52"]
-[ext_resource type="Script" uid="uid://xfd1d5e7ld1q" path="res://scenes/cat_menu_paw_controller.gd" id="7_aaywf"]
+[ext_resource type="Script" path="res://scripts/price_graph.gd" id="7_2af52"]
+[ext_resource type="Script" path="res://scenes/cat_menu_paw_controller.gd" id="7_aaywf"]
 [ext_resource type="PackedScene" uid="uid://41n2eyh8wgw" path="res://scenes/quit_button.tscn" id="8_thu7x"]
 [ext_resource type="PackedScene" uid="uid://bqcqwkkeod8sk" path="res://scenes/clock.tscn" id="10_6c8sk"]
 [ext_resource type="Texture2D" uid="uid://b6pj6ic1ob1br" path="res://art/StickyNote.png" id="11_5p0sf"]
@@ -27,7 +27,7 @@ shader_parameter/rotation = 0.70981485014235
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rtd1e"]
 shader = ExtResource("15_7ycwl")
 shader_parameter/resolution = Vector2(315.285, 109.755)
-shader_parameter/scan_line_amount = 0.027000001282499998
+shader_parameter/scan_line_amount = 0.02700000128249999
 shader_parameter/warp_amount = 0.05
 shader_parameter/vignette_amount = 0.62000002945
 shader_parameter/vignette_intensity = 0.1390000066025

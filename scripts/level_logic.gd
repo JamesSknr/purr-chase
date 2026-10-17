@@ -132,6 +132,7 @@ func _update_clock() -> void:
 	if clock_label:
 		var secs := ceili(time_left)
 		clock_label.text = "%d:%02d" % [floori(secs / 60.0), secs % 60]
+		
 
 
 func _on_news(_tick: int, _symbol: String, headline: String) -> void:
@@ -156,12 +157,14 @@ func _unhandled_input(event):
 		current_action = action.BUY
 		cat_paw.press_button_tween(buy_button.position)
 		buy_share()
+		Audio.play_neutral_meow()
 
 	# If 'D' key is pressed sell a share
 	elif event.keycode == KEY_D:
 		current_action = action.SELL
 		cat_paw.press_button_tween(sell_button.position)
 		sell_share()
+		Audio.play_angry_meow()
 
 
 func buy_share() -> void:
@@ -190,3 +193,4 @@ func sell_share() -> void:
 	current_action = action.HOLD
 	_update_hud()
 	sell_button.press_button_tween()
+	
