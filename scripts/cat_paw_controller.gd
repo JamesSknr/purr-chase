@@ -2,7 +2,7 @@ extends Control
 class_name Cat
 
 @export var press_distance: float = 120.0
-@export var move_duration: float = 0.25
+@export var move_duration: float = 0.1
 @export var press_pause: float = 0.08
 
 var original_position: Vector2

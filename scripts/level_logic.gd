@@ -173,9 +173,15 @@ func buy_share() -> void:
 	else:
 		print("NOT ENOUGH CASH (need $%.2f, have $%.2f)" % [price, cash])
 	current_action = action.HOLD
+<<<<<<< HEAD
 	_update_hud()
 
 
+=======
+	buy_button.press_button_tween()
+	
+	
+>>>>>>> main
 func sell_share() -> void:
 	var price := current_price()
 	if shares > 0:
@@ -186,4 +192,8 @@ func sell_share() -> void:
 	else:
 		print("NO SHARES TO SELL")
 	current_action = action.HOLD
+<<<<<<< HEAD
 	_update_hud()
+=======
+	sell_button.press_button_tween()
+>>>>>>> main
