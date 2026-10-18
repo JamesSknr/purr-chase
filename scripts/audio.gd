@@ -10,6 +10,13 @@ const JPC_MEOW_NEUTRAL_2 = preload("uid://cxnq38jwovl7n")
 const JPC_MEOW_NEUTRAL_3 = preload("uid://cbc8mp3p450q5")
 const JPC_MEOW_NEUTRAL_4 = preload("uid://cpftea5bd15aj")
 
+const BUTTON_PUSH_1 = preload("uid://dj88qblgoolki")
+const BUTTON_PUSH_2 = preload("uid://6rotqdp5ncg8")
+const BUTTON_PUSH_3 = preload("uid://bn1kphv231pvw")
+
+
+
+
 var meow_neutral_list = [
 	JPC_MEOW_NEUTRAL_1,
 	JPC_MEOW_NEUTRAL_2,
@@ -20,6 +27,12 @@ var meow_neutral_list = [
 var meow_angry_list = [
 	BOARD_MEOW_ANGRY_1,
 	BOARD_MEOW_ANGRY_2
+]
+
+var button_push_list = [
+	BUTTON_PUSH_1,
+	BUTTON_PUSH_2,
+	BUTTON_PUSH_3
 ]
 
 
@@ -71,3 +84,7 @@ func play_neutral_meow() -> void:
 func play_angry_meow() -> void:
 	var random_meow: AudioStream = meow_angry_list.pick_random()
 	_play_FX(random_meow)
+
+func play_button_push() -> void:
+	var random_push: AudioStream = button_push_list.pick_random()
+	_play_FX(random_push)

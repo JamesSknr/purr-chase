@@ -242,14 +242,14 @@ func _unhandled_input(event):
 		current_action = action.BUY
 		cat_paw.press_button_tween(buy_button.position)
 		buy_share()
-		Audio.play_neutral_meow()
+		#Audio.play_neutral_meow()
 
 	# If 'D' key is pressed sell a share
 	elif event.keycode == KEY_D:
 		current_action = action.SELL
 		cat_paw.press_button_tween(sell_button.position)
 		sell_share()
-		Audio.play_angry_meow()
+		#Audio.play_angry_meow()
 
 	# DEBUG (delete later): 1 = fake good news, 2 = fake bad news.
 	elif event.keycode == KEY_1:

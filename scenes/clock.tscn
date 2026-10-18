@@ -6,17 +6,17 @@
 [ext_resource type="Texture2D" uid="uid://d2cp45a6u1ytf" path="res://art/minuteHand.png" id="3_er1xc"]
 [ext_resource type="Texture2D" uid="uid://d0xluwuuoxp5r" path="res://art/cat_clock.png" id="5_er1xc"]
 [ext_resource type="FontFile" uid="uid://cokcitl7rd7kp" path="res://art/DarumadropOne-Regular.ttf" id="6_r7ruc"]
+[ext_resource type="Texture2D" uid="uid://dck8cbs1jf15m" path="res://art/Buy Button.png" id="7_ma5gl"]
 
 [node name="clock" type="Node2D" unique_id=1996270700]
 script = ExtResource("1_7dv1d")
 metadata/_edit_vertical_guides_ = [701.0]
 metadata/_edit_horizontal_guides_ = [448.0]
 
-[node name="Shadow" type="Sprite2D" parent="." unique_id=254031549]
-modulate = Color(0, 0, 0, 0.24313726)
-position = Vector2(-21, 80)
-rotation = -0.121588506
-scale = Vector2(0.95113856, 0.53997785)
+[node name="Clockface" type="Sprite2D" parent="." unique_id=925126860]
+modulate = Color(0, 0, 0, 0.07450981)
+position = Vector2(36.000004, 389.00003)
+rotation = 3.0117228
 texture = ExtResource("1_eptq3")
 
 [node name="face" type="Sprite2D" parent="." unique_id=1527462113]
@@ -108,13 +108,6 @@ offset_bottom = 24.0
 [node name="CatClock" type="Sprite2D" parent="." unique_id=506791859]
 position = Vector2(-1.0000002, 5.9604645e-08)
 scale = Vector2(0.5064197, 0.5064197)
-texture = ExtResource("5_er1xc")
-
-[node name="CatClock2" type="Sprite2D" parent="CatClock" unique_id=267993471]
-modulate = Color(0, 0, 0, 0.08627451)
-show_behind_parent = true
-position = Vector2(1.9746466, 17.77182)
-scale = Vector2(0.99999994, 0.99999994)
 texture = ExtResource("5_er1xc")
 
 [node name="HourPivot" type="Node2D" parent="." unique_id=66396198]
@@ -262,3 +255,12 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("6_r7ruc")
 theme_override_font_sizes/font_size = 29
 text = "11"
+
+[node name="Shadow2" type="Sprite2D" parent="." unique_id=853622144]
+visible = false
+modulate = Color(0, 0, 0, 0.09803922)
+show_behind_parent = true
+position = Vector2(-10, 163)
+rotation = 3.1415925
+scale = Vector2(0.23510025, 0.28169742)
+texture = ExtResource("7_ma5gl")
