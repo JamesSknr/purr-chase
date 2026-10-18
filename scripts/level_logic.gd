@@ -54,6 +54,7 @@ var share_name: String = ""
 
 
 func _ready() -> void:
+	Audio.play_menu_music()
 	_ensure_news_banner()
 	start_round()
 
@@ -116,7 +117,8 @@ func end_round() -> void:
 	round_ended.emit(worth, profit)
 	profit += shares * current_price()
 	Audio.total_profit = profit
-	
+	# Freeze gameplay for 2 seconds before transitioning.
+	await get_tree().create_timer(2.0).timeout
 	SceneTransition.change_scene_to_file("res://scenes/Menu.tscn")
 	
 

@@ -20,7 +20,6 @@
 [ext_resource type="Texture2D" uid="uid://c0mmq5su5dp03" path="res://art/JPawMorganMugFront.png" id="11_7t7qg"]
 [ext_resource type="PackedScene" uid="uid://pqhhbjv3k6fa" path="res://scenes/play_button.tscn" id="13_thu7x"]
 [ext_resource type="Shader" path="res://shaders/CrtEffect.gdshader" id="15_7ycwl"]
-[ext_resource type="Script" path="res://scenes/cat_face.gd" id="18_dek3k"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7t7qg"]
 shader = ExtResource("2_11y2r")
@@ -127,11 +126,10 @@ position = Vector2(280, 477)
 [node name="QuitButton" parent="." unique_id=395582325 instance=ExtResource("8_thu7x")]
 position = Vector2(879, 479)
 
-[node name="clock" parent="." unique_id=1996270700 node_paths=PackedStringArray("day_label") instance=ExtResource("10_6c8sk")]
+[node name="clock" parent="." unique_id=1996270700 instance=ExtResource("10_6c8sk")]
 visible = false
 position = Vector2(1002.99994, 445)
 scale = Vector2(0.7478293, 0.7478293)
-day_label = NodePath("../StickyNote/StickyNoteLabel")
 
 [node name="Title" type="RichTextLabel" parent="." unique_id=983524065]
 anchors_preset = 6
@@ -181,7 +179,6 @@ horizontal_alignment = 1
 position = Vector2(310, 82)
 scale = Vector2(0.19645762, 0.19645762)
 texture = ExtResource("11_5p0sf")
-script = ExtResource("18_dek3k")
 
 [node name="StickyNoteLabel" type="Label" parent="StickyNote" unique_id=298669694]
 offset_left = -300.31885

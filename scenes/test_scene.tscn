@@ -34,6 +34,11 @@ shader_parameter/brightness_boost = 1.262000012445
 
 [node name="testScene" type="Node2D" unique_id=2012543513]
 script = ExtResource("1_j8ivh")
+round_length = null
+seconds_per_tick = null
+starting_cash = null
+warmup_ticks = null
+level_id = null
 
 [node name="LivingRoomBackground" type="Sprite2D" parent="." unique_id=2069714296]
 position = Vector2(576, 324)

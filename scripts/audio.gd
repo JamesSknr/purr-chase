@@ -1,5 +1,6 @@
 extends AudioStreamPlayer
 
+
 const PLUCKY_WALK_SONG = preload("uid://bgqggxayw1axn")
 
 const BOARD_MEOW_ANGRY_1 = preload("uid://x5885t8ypv4y")
@@ -36,19 +37,18 @@ var button_push_list = [
 ]
 
 
-func _play_music(music: AudioStream, volume: float = -25.0, fade_in: bool = false) -> void:
-	if stream == music:
-		return
+func _play_music(music_stream: AudioStream, volume: float = -25.0) -> void:
+	var music_player := AudioStreamPlayer.new()
+	music_player.stream = music_stream
+	music_player.name = "MUSIC_PLAYER"
+	music_player.volume_db = volume
 
-	stream = music
+	add_child(music_player)
+	music_player.play()
 
-	if fade_in:
-		volume_db = -80.0
-		play()
-		fade_music_volume(volume)
-	else:
-		volume_db = volume
-		play()
+	await music_player.finished
+
+	music_player.queue_free()
 
 
 func fade_music_volume(target_db: float, duration: float = 1.0) -> void:
@@ -71,6 +71,21 @@ func _play_FX(fx_stream: AudioStream, volume: float = -15.0) -> void:
 
 	fx_player.queue_free()
 
+func fixed_music_player(fx_stream: AudioStream, volume: float = -15.0) -> void:
+	if playing and stream == fx_stream:
+		return
+
+	var fx_player := AudioStreamPlayer.new()
+	fx_player.stream = fx_stream
+	fx_player.name = "FX_PLAYER"
+	fx_player.volume_db = volume
+
+	add_child(fx_player)
+	fx_player.play()
+
+	await fx_player.finished
+
+	fx_player.queue_free()
 
 func play_menu_music() -> void:
 	_play_music(PLUCKY_WALK_SONG)

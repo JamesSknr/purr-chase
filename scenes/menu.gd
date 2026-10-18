@@ -1,4 +1,5 @@
 extends Node2D
+const PLUCKY_WALK_SONG = preload("uid://bgqggxayw1axn")
 
 @onready var cat_paw: Control = $CatPaw
 
@@ -9,7 +10,7 @@ extends Node2D
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-	Audio.play_menu_music()
+	Audio.fixed_music_player(PLUCKY_WALK_SONG,0.3)
 	profit_label.text = "Current profit: $%.2f" % Audio.total_profit
 	pass
 
