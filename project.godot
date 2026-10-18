@@ -17,8 +17,8 @@ config/icon="res://art/icon.svg"
 
 [autoload]
 
-Audio="*uid://cvy3qb886xrew"
 SceneTransition="*uid://ewser8mpg3lb"
+Audio="*uid://dl8u3un0kktbo"
 
 [display]
 

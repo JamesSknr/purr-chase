@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://bqcqwkkeod8sk" path="res://scenes/clock.tscn" id="9_h3xc6"]
 [ext_resource type="FontFile" uid="uid://cokcitl7rd7kp" path="res://art/DarumadropOne-Regular.ttf" id="10_6qxox"]
 [ext_resource type="Texture2D" uid="uid://b6pj6ic1ob1br" path="res://art/StickyNote.png" id="12_gthg3"]
-[ext_resource type="Shader" uid="uid://dg1hrhvaer44r" path="res://shaders/CrtEffect.gdshader" id="13_ntc4i"]
+[ext_resource type="Shader" path="res://shaders/CrtEffect.gdshader" id="13_ntc4i"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rnaij"]
 shader = ExtResource("2_3qnke")

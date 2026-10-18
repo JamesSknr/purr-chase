@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bqcqwkkeod8sk"]
 
-[ext_resource type="Script" path="res://scenes/clock.gd" id="1_7dv1d"]
+[ext_resource type="Script" uid="uid://cvbpojxfgv48c" path="res://scenes/clock.gd" id="1_7dv1d"]
 [ext_resource type="Texture2D" uid="uid://ccyc7boi06hrx" path="res://art/clockface.png" id="1_eptq3"]
 [ext_resource type="Texture2D" uid="uid://cb6kcqjdo4ti1" path="res://art/hourHand.png" id="2_7dv1d"]
 [ext_resource type="Texture2D" uid="uid://d2cp45a6u1ytf" path="res://art/minuteHand.png" id="3_er1xc"]
