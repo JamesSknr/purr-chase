@@ -68,9 +68,11 @@ func copy_font_from(source: Label) -> void:
 ## impact_pct is the signed size of the move (e.g. +12.0 or -30.0). Use 0 if unknown.
 func show_news(headline: String, impact_pct: float = 0.0) -> void:
 	if impact_pct > 0.0:
+		
 		self.modulate = good_color
 		_label.add_theme_color_override("font_color", impact_text_color)
 	elif impact_pct < 0.0:
+		Audio.play_angry_meow()
 		self.modulate = bad_color
 		_label.add_theme_color_override("font_color", impact_text_color)
 	else:

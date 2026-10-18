@@ -136,9 +136,9 @@ func net_worth() -> float:
 func _update_hud() -> void:
 	var stock := market.get_stock(SYMBOL)
 	if price_label:
-		price_label.text = "%s $%.2f (%+.1f%%)" % [SYMBOL, stock.price, stock.change_pct()]
+		price_label.text = "%s: $%.2f (%+.1f%%)" % [SYMBOL, stock.price, stock.change_pct()]
 	if cash_label:
-		cash_label.text = "Cash $%.2f" % cash
+		cash_label.text = "Cash: $%.2f" % cash
 	if shares_label:
 		shares_label.text = "Shares: %d" % shares
 
@@ -190,6 +190,7 @@ func _on_headline(text: String) -> void:
 	if news_banner:
 		# Grey on purpose: the player has to work out which way the price will go.
 		news_banner.show_news(text)
+		
 
 
 ## ...and the price moves a couple of seconds later. Flash the graph to show it.
@@ -198,6 +199,11 @@ func _on_event_applied(event: Dictionary) -> void:
 		return
 	var impact := float(event.get("impact", 0.0))
 	_flash_graph(impact >= 0.0)
+	
+	if impact >= 0.0:
+		Audio.play_neutral_meow()
+	else:
+		Audio.play_angry_meow()
 
 
 ## Only used if market.event_chance is ever turned back on (random news).
