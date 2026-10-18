@@ -127,10 +127,11 @@ position = Vector2(280, 477)
 [node name="QuitButton" parent="." unique_id=395582325 instance=ExtResource("8_thu7x")]
 position = Vector2(879, 479)
 
-[node name="clock" parent="." unique_id=1996270700 instance=ExtResource("10_6c8sk")]
+[node name="clock" parent="." unique_id=1996270700 node_paths=PackedStringArray("day_label") instance=ExtResource("10_6c8sk")]
 visible = false
 position = Vector2(1002.99994, 445)
 scale = Vector2(0.7478293, 0.7478293)
+day_label = NodePath("../StickyNote/StickyNoteLabel")
 
 [node name="Title" type="RichTextLabel" parent="." unique_id=983524065]
 anchors_preset = 6

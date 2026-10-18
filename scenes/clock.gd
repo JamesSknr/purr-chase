@@ -1,7 +1,7 @@
 extends Node2D
 ## Clock that runs 9:00–17:00 once per day, Monday to Friday.
-## Each day is shorter in real time (set in `day_lengths`).
-## Attach to the root `clock` node. Children must be HourPivot and MinutePivot
+## Each day is shorter in real time (set in day_lengths).
+## Attach to the root clock node. Children must be HourPivot and MinutePivot
 ## (Node2Ds at the dial centre, each holding its hand sprite).
 
 signal day_started(day_index: int, day_name: String)  # 0 = Monday ... 4 = Friday
