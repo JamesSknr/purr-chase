@@ -7,6 +7,8 @@ var current_action = action.HOLD
 @onready var sell_button = $SellButton
 
 
+
+
 # ---------------------------------------------------------------------
 # ROUNDS + MARKET
 # ---------------------------------------------------------------------
@@ -23,7 +25,7 @@ signal round_ended(final_net_worth: float, profit: float)
 ## Ticks simulated before each round, so the graph has history to show.
 @export var warmup_ticks: int = 60
 ## Which level of events.json to play (1 = the first level).
-@export var level_id: int = 1
+@export var level_id: String = "1"
 ## The graph is a direct child of this node.
 @onready var graph: PriceGraph = $PriceGraph
 @onready var price_graph: PriceGraph = $PriceGraph
@@ -38,6 +40,9 @@ var shares: int = 0
 var time_left: float = 0.0
 var round_active: bool = false
 var _tick_accum: float = 0.0
+
+
+var share_name: String = ""
 
 # Optional HUD: add Label nodes with these exact names as children of this node.
 @onready var price_label: Label = get_node_or_null("PriceLabel") as Label
@@ -67,7 +72,14 @@ func start_round() -> void:
 	events.set_market(market)
 	events.market_symbol = SYMBOL
 	events.seconds_per_tick = seconds_per_tick
+	
+	##OVERRWRITE THIS CODE TO START A RANDOM DAY INSTEAD
+	var random_day = randi_range(1, 5)
+	level_id = str(random_day)
+	
 	events.start_level(level_id)
+	var level_data: Dictionary = events._levels[str(level_id)]
+	share_name = level_data["name"]
 
 	market.run(warmup_ticks)
 	market.news_posted.connect(_on_news)
@@ -102,6 +114,11 @@ func end_round() -> void:
 	if result_label:
 		result_label.text = message
 	round_ended.emit(worth, profit)
+	profit += shares * current_price()
+	Audio.total_profit = profit
+	
+	SceneTransition.change_scene_to_file("res://scenes/Menu.tscn")
+	
 
 
 func _process(delta: float) -> void:
@@ -136,11 +153,11 @@ func net_worth() -> float:
 func _update_hud() -> void:
 	var stock := market.get_stock(SYMBOL)
 	if price_label:
-		price_label.text = "%s: $%.2f (%+.1f%%)" % [SYMBOL, stock.price, stock.change_pct()]
+		price_label.text = "%s: $%.2f (%+.1f%%)" % [share_name.to_upper(), stock.price, stock.change_pct()]
 	if cash_label:
 		cash_label.text = "Cash: $%.2f" % cash
 	if shares_label:
-		shares_label.text = "Shares: %d" % shares
+		shares_label.text ="Shares: %d" % shares
 
 
 func _update_clock() -> void:
@@ -261,7 +278,10 @@ func _unhandled_input(event):
 	elif event.keycode == KEY_1:
 		_debug_event("TEST: Big buyer arrives!", "spike", 15.0)
 	elif event.keycode == KEY_2:
-		_debug_event("TEST: Supply scare!", "crash", -20.0)
+		_debug_event("TEST: Supply scare!", "crash", -20.0)#
+		
+	elif event.keycode == KEY_9:
+		end_round()
 
 
 func buy_share() -> void:

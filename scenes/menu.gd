@@ -4,11 +4,13 @@ extends Node2D
 
 @onready var play_button: Node2D = $PlayButton
 @onready var quit_button: Node2D = $QuitButton
+@onready var profit_label: RichTextLabel = $ProfitLabel
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	Audio.play_menu_music()
+	profit_label.text = "Current profit: $%.2f" % Audio.total_profit
 	pass
 
 

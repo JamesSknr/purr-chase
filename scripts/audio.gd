@@ -15,7 +15,7 @@ const BUTTON_PUSH_2 = preload("uid://6rotqdp5ncg8")
 const BUTTON_PUSH_3 = preload("uid://bn1kphv231pvw")
 
 
-
+var total_profit: float = 0.00
 
 var meow_neutral_list = [
 	JPC_MEOW_NEUTRAL_1,

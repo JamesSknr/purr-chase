@@ -64,11 +64,12 @@ func _load_events() -> void:
 
 ## Begin a level, e.g. start_level(1). Re-points the stock at the new commodity.
 func start_level(level_id) -> void:
-	var key := str(level_id)
-	if not _levels.has(key):
-		push_error("EventManager: no level '%s' in events.json" % key)
+	
+	
+	if not _levels.has(level_id):
+		push_error("EventManager: no level '%s' in events.json" % level_id)
 		return
-	var lvl: Dictionary = _levels[key]
+	var lvl: Dictionary = _levels[level_id]
 	_pool = lvl.get("events", [])
 	var interval: Array = lvl.get("event_interval", [7, 11])
 	_interval_min = float(interval[0])
