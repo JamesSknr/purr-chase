@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://4yt8pa0vwxtw"]
 
-[ext_resource type="Script" path="res://scripts/cat_paw_controller.gd" id="1_8td5k"]
+[ext_resource type="Script" uid="uid://brokrr0sbu05j" path="res://scripts/cat_paw_controller.gd" id="1_8td5k"]
 [ext_resource type="Texture2D" uid="uid://dmcgq4hlsvcd" path="res://art/Cat Paw.png" id="2_8td5k"]
 [ext_resource type="Texture2D" uid="uid://cj4wu5fhxbdx8" path="res://art/Cat Paw Orange.png" id="2_ncdn1"]
 
@@ -20,7 +20,7 @@ scale = Vector2(0.16038592, 0.16038594)
 texture = ExtResource("2_ncdn1")
 
 [node name="CatPawSprite2" type="Sprite2D" parent="." unique_id=1418442198]
-modulate = Color(0, 0, 0, 0.12941177)
+modulate = Color(0, 0, 0, 0.09803922)
 show_behind_parent = true
 position = Vector2(-23.000004, 631)
 scale = Vector2(0.16038592, 0.16038594)

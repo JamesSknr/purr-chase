@@ -16,8 +16,8 @@ texture = ExtResource("2_74fmh")
 scale = Vector2(0.12290625, 0.12290625)
 texture = ExtResource("3_1uwlq")
 
-[node name="ButtonBase2" type="Sprite2D" parent="." unique_id=2039645991]
-modulate = Color(0, 0, 0, 0.18039216)
+[node name="Shadow" type="Sprite2D" parent="." unique_id=2039645991]
+modulate = Color(0, 0, 0, 0.09803922)
 show_behind_parent = true
 position = Vector2(0, 11)
 scale = Vector2(0.12290625, 0.12290625)

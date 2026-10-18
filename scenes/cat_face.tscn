@@ -1,0 +1,199 @@
+[gd_scene format=3 uid="uid://cjn2p0avmgaic"]
+
+[ext_resource type="Script" uid="uid://c70tojnwcjimi" path="res://scenes/cat_face.gd" id="1_s51nx"]
+[ext_resource type="Texture2D" uid="uid://r812bhdt1imh" path="res://art/CatFaceTest.png" id="1_uw1nd"]
+
+[sub_resource type="Animation" id="Animation_uw1nd"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect2:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ColorRect3:color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ColorRect4:color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(-0.033333335),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_s51nx"]
+resource_name = "blink"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.39359465),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect2:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.39359465),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ColorRect3:color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.39359465),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ColorRect4:color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.39359465),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3w58d"]
+_data = {
+&"RESET": SubResource("Animation_uw1nd"),
+&"blink": SubResource("Animation_s51nx")
+}
+
+[node name="CatFace" type="Node2D" unique_id=2069001028]
+script = ExtResource("1_s51nx")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=399304890]
+root_node = NodePath("../SubViewportContainer/SubViewport/CatFaceTest")
+libraries/ = SubResource("AnimationLibrary_3w58d")
+autoplay = &"blink"
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1401948624]
+modulate = Color(1, 1, 1, 0.03529412)
+offset_right = 512.0
+offset_bottom = 512.0
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1169586277]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(965, 664)
+render_target_update_mode = 4
+
+[node name="CatFaceTest" type="Sprite2D" parent="SubViewportContainer/SubViewport" unique_id=1519261350]
+position = Vector2(433, 320)
+texture = ExtResource("1_uw1nd")
+
+[node name="ColorRect" type="ColorRect" parent="SubViewportContainer/SubViewport/CatFaceTest" unique_id=2084017070]
+offset_left = 82.0
+offset_top = -25.0
+offset_right = 199.0
+offset_bottom = 113.0
+color = Color(1, 1, 1, 0)
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect2" type="ColorRect" parent="SubViewportContainer/SubViewport/CatFaceTest" unique_id=1698240742]
+offset_left = 88.0
+offset_top = 128.0
+offset_right = 205.0
+offset_bottom = 266.0
+color = Color(1, 1, 1, 0)
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect3" type="ColorRect" parent="SubViewportContainer/SubViewport/CatFaceTest" unique_id=1098276196]
+offset_left = -220.0
+offset_top = 59.0
+offset_right = -103.0
+offset_bottom = 114.0
+color = Color(1, 1, 1, 0)
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect4" type="ColorRect" parent="SubViewportContainer/SubViewport/CatFaceTest" unique_id=1074583742]
+offset_left = -214.0
+offset_top = 129.0
+offset_right = -97.0
+offset_bottom = 267.0
+color = Color(1, 1, 1, 0)
+metadata/_edit_use_anchors_ = true
+
+[node name="CoverCheeck" type="ColorRect" parent="SubViewportContainer/SubViewport/CatFaceTest" unique_id=754337466]
+offset_left = -265.0
+offset_top = 157.0
+offset_right = -209.0
+offset_bottom = 218.0
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect5" type="ColorRect" parent="SubViewportContainer/SubViewport/CatFaceTest/CoverCheeck" unique_id=2072995715]
+layout_mode = 0
+offset_left = 11.0
+offset_top = 10.0
+offset_right = 67.0
+offset_bottom = 71.0
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect6" type="ColorRect" parent="SubViewportContainer/SubViewport/CatFaceTest/CoverCheeck" unique_id=1416582252]
+layout_mode = 0
+offset_left = 458.0
+offset_top = -10.0
+offset_right = 514.0
+offset_bottom = 51.0
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect7" type="ColorRect" parent="SubViewportContainer/SubViewport/CatFaceTest/CoverCheeck" unique_id=70508568]
+layout_mode = 0
+offset_left = 439.0
+offset_top = 12.0
+offset_right = 495.0
+offset_bottom = 73.0
+metadata/_edit_use_anchors_ = true

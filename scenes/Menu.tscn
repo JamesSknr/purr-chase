@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://4yt8pa0vwxtw" path="res://scenes/cat_paw.tscn" id="6_aaywf"]
 [ext_resource type="Script" path="res://scripts/price_graph.gd" id="7_2af52"]
 [ext_resource type="Script" path="res://scenes/cat_menu_paw_controller.gd" id="7_aaywf"]
+[ext_resource type="PackedScene" uid="uid://cjn2p0avmgaic" path="res://scenes/cat_face.tscn" id="7_i7htd"]
 [ext_resource type="Texture2D" uid="uid://cwbgsesayjitd" path="res://art/JPawMorganMug.png" id="8_6c8sk"]
 [ext_resource type="PackedScene" uid="uid://41n2eyh8wgw" path="res://scenes/quit_button.tscn" id="8_thu7x"]
 [ext_resource type="Texture2D" uid="uid://dck8cbs1jf15m" path="res://art/Buy Button.png" id="9_5p0sf"]
@@ -19,6 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://c0mmq5su5dp03" path="res://art/JPawMorganMugFront.png" id="11_7t7qg"]
 [ext_resource type="PackedScene" uid="uid://pqhhbjv3k6fa" path="res://scenes/play_button.tscn" id="13_thu7x"]
 [ext_resource type="Shader" uid="uid://dg1hrhvaer44r" path="res://shaders/CrtEffect.gdshader" id="15_7ycwl"]
+[ext_resource type="Script" uid="uid://c70tojnwcjimi" path="res://scenes/cat_face.gd" id="18_dek3k"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7t7qg"]
 shader = ExtResource("2_11y2r")
@@ -62,7 +64,7 @@ position = Vector2(114, 412)
 scale = Vector2(0.20339262, 0.20339262)
 texture = ExtResource("3_2af52")
 
-[node name="BallOfYarn2" type="Sprite2D" parent="BallOfYarn" unique_id=334007567]
+[node name="Shadow" type="Sprite2D" parent="BallOfYarn" unique_id=334007567]
 modulate = Color(0, 0, 0, 0.09803922)
 show_behind_parent = true
 position = Vector2(-9.833191, 19.666504)
@@ -80,6 +82,10 @@ offset_right = 899.0
 offset_bottom = 443.0
 color = Color(2.6095218e-05, 2.6095217e-05, 2.6095213e-05, 1)
 
+[node name="CatFace" parent="." unique_id=2069001028 instance=ExtResource("7_i7htd")]
+position = Vector2(292, 104)
+scale = Vector2(0.51529914, 0.51529914)
+
 [node name="PriceGraph" type="Control" parent="." unique_id=1932050549]
 visible = false
 layout_mode = 3
@@ -95,7 +101,7 @@ position = Vector2(1037, 415.00003)
 scale = Vector2(0.18721928, 0.18721928)
 texture = ExtResource("8_6c8sk")
 
-[node name="CoffeeSmoke" type="ColorRect" parent="JPawMorganMug" unique_id=1426298569]
+[node name="CoffeeSteam" type="ColorRect" parent="JPawMorganMug" unique_id=1426298569]
 material = SubResource("ShaderMaterial_l3wcu")
 offset_left = -331.16232
 offset_top = -998.8289
@@ -103,7 +109,7 @@ offset_right = 296.46127
 offset_bottom = -285.69598
 
 [node name="Shadow" type="Sprite2D" parent="JPawMorganMug" unique_id=244836274]
-modulate = Color(0, 0, 0, 0.2901961)
+modulate = Color(0, 0, 0, 0.09803922)
 show_behind_parent = true
 position = Vector2(-37.389206, 352.52774)
 rotation = 3.1415925
@@ -152,8 +158,9 @@ horizontal_alignment = 1
 position = Vector2(310, 82)
 scale = Vector2(0.19645762, 0.19645762)
 texture = ExtResource("11_5p0sf")
+script = ExtResource("18_dek3k")
 
-[node name="PriceLabel2" type="Label" parent="StickyNote" unique_id=298669694]
+[node name="StickyNoteLabel" type="Label" parent="StickyNote" unique_id=298669694]
 offset_left = -300.31885
 offset_top = -290.13892
 offset_right = 1034.6812
@@ -176,9 +183,8 @@ move_duration = 0.2
 idle_distance = 5.0
 idle_duration = 1.2
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=1518445445]
+[node name="CRTOverlay" type="ColorRect" parent="." unique_id=1518445445]
 material = SubResource("ShaderMaterial_rtd1e")
-offset_left = -4.0
-offset_top = -6.0
-offset_right = 1148.0
-offset_bottom = 643.0
+offset_right = 1152.0
+offset_bottom = 648.0
+metadata/_edit_lock_ = true
