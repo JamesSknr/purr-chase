@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bwfuk4yj0u48s"]
 
 [ext_resource type="Texture2D" uid="uid://cd0qxetsmbyuh" path="res://art/Sell Button.png" id="1_2wawk"]
-[ext_resource type="Script" path="res://scenes/sell_button.gd" id="1_iehiq"]
+[ext_resource type="Script" uid="uid://c5oyc2pm0jqli" path="res://scenes/sell_button.gd" id="1_iehiq"]
 [ext_resource type="Texture2D" uid="uid://c61vyc5episx3" path="res://art/Button Base.png" id="2_iehiq"]
 
 [node name="SellButton" type="Node2D" unique_id=1816091244]

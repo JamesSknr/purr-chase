@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cjn2p0avmgaic"]
 
-[ext_resource type="Script" uid="uid://c70tojnwcjimi" path="res://scenes/cat_face.gd" id="1_s51nx"]
+[ext_resource type="Script" path="res://scenes/cat_face.gd" id="1_s51nx"]
 [ext_resource type="Texture2D" uid="uid://r812bhdt1imh" path="res://art/CatFaceTest.png" id="1_uw1nd"]
 
 [sub_resource type="Animation" id="Animation_uw1nd"]

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ewser8mpg3lb"]
 
-[ext_resource type="Script" uid="uid://bfx2rdbdb25ob" path="res://scripts/scene_transition.gd" id="1_rujfs"]
+[ext_resource type="Script" path="res://scripts/scene_transition.gd" id="1_rujfs"]
 [ext_resource type="Texture2D" uid="uid://cp415upxgcnm0" path="res://art/CatPawIcon.png" id="3_hgfgv"]
 
 [sub_resource type="Shader" id="Shader_rujfs"]
@@ -57,7 +57,7 @@ shader_parameter/pattern = ExtResource("3_hgfgv")
 shader_parameter/pattern_color = Color(0.99999994, 0.5913386, 0.2806478, 1)
 shader_parameter/tiling = 100.0
 shader_parameter/speed = Vector2(0.1, 0.5)
-shader_parameter/rotation = 0.42981483684235045
+shader_parameter/rotation = 0.4298148368423505
 
 [sub_resource type="Animation" id="Animation_2sgj6"]
 resource_name = "RESET"

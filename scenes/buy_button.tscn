@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bgmm8il27e1p"]
 
 [ext_resource type="Texture2D" uid="uid://dck8cbs1jf15m" path="res://art/Buy Button.png" id="1_ie13l"]
-[ext_resource type="Script" path="res://scripts/buy_button.gd" id="1_kyagg"]
+[ext_resource type="Script" uid="uid://cly7r1pulhl2p" path="res://scripts/buy_button.gd" id="1_kyagg"]
 [ext_resource type="Texture2D" uid="uid://c61vyc5episx3" path="res://art/Button Base.png" id="2_kyagg"]
 
 [node name="BuyButton" type="Node2D" unique_id=1816091244]

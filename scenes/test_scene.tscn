@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://c8i2xbxqneg22" path="res://art/monitor.png" id="3_s36qc"]
 [ext_resource type="Texture2D" uid="uid://cp415upxgcnm0" path="res://art/CatPawIcon.png" id="3_wtsjf"]
 [ext_resource type="PackedScene" uid="uid://bwfuk4yj0u48s" path="res://scenes/sell_button.tscn" id="4_7ddre"]
-[ext_resource type="Script" path="res://scripts/price_graph.gd" id="4_wtsjf"]
+[ext_resource type="Script" uid="uid://wyp7h10gg56s" path="res://scripts/price_graph.gd" id="4_wtsjf"]
 [ext_resource type="PackedScene" uid="uid://bqcqwkkeod8sk" path="res://scenes/clock.tscn" id="9_h3xc6"]
 [ext_resource type="FontFile" uid="uid://cokcitl7rd7kp" path="res://art/DarumadropOne-Regular.ttf" id="10_6qxox"]
 [ext_resource type="Texture2D" uid="uid://b6pj6ic1ob1br" path="res://art/StickyNote.png" id="12_gthg3"]

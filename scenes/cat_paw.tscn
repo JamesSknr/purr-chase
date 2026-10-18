@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://4yt8pa0vwxtw"]
 
-[ext_resource type="Script" uid="uid://brokrr0sbu05j" path="res://scripts/cat_paw_controller.gd" id="1_8td5k"]
+[ext_resource type="Script" path="res://scripts/cat_paw_controller.gd" id="1_8td5k"]
 [ext_resource type="Texture2D" uid="uid://dmcgq4hlsvcd" path="res://art/Cat Paw.png" id="2_8td5k"]
 [ext_resource type="Texture2D" uid="uid://cj4wu5fhxbdx8" path="res://art/Cat Paw Orange.png" id="2_ncdn1"]
 
